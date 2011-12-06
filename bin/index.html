@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>Etheria</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="language" content="en" />
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	
+	<script src="js/swfobject.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		var flashvars = {
+		};
+		var params = {
+			menu: "false",
+			scale: "noScale",
+			allowFullscreen: "true",
+			allowScriptAccess: "always",
+			bgcolor: "#222222"
+		};
+		var attributes = {
+			id:"Etheria"
+		};
+		swfobject.embedSWF("Etheria.swf", "altContent", "100%", "100%", "10.0.0", "expressInstall.swf", flashvars, params, attributes);
+	</script>
+	<style type="text/css">
+		html, body { height:100%; text-align:center;}
+		body { margin:0; }
+	</style>
+</head>
+<body style="background-color:#222222; text-align:center;">
+<br>
+<object
+classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" 
+codebase="http://download.macromedia.com
+/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0"
+width="850" height="640" id="movie" align="">
+<param name="Etheria" value="Etheria.swf">
+<embed src="Etheria.swf" quality="high" width="850"
+height="640" name="Etheria" align="" 
+type="application/x-shockwave-flash"
+plug inspage="http://www.macromedia.com/go/getflashplayer"> 
+</object>
+<center>
+<div style="text-align:left; width:640px; color:#aaaaaa;">
+	
+		Instructions:<br>
+		Turn: Left + Right</br>
+		Accelerate: Up<br>
+		Face to Decellerate: Down (turns ship to face away from movement)<br>
+		Land: L (Click on planet to select, or "L" to select nearest planet)<br>
+		Autopilot: A (turns towards current target)<br>
+		<br>
+		Double-time: Slash key<br>
+		<br>
+		debug: z to clear and respawn the starfield. n to damage shields (energy is used to recharge shields, fire weapons, etc)<br>
+		<br>
+		The "Load" button only does the very first part - loading a file from the system.
+		It doesn't actually load anything from the file. Mostly what I've been working on for
+		the past several days is getting the program to create the planets and systems and ships all
+		from text files rather than inline code. So...back-end stuff that doesn't show up until
+		I get several other things done. But it's stable(ish)!<br>
+	
+</div>
+</center>
+</body>
+</html>
