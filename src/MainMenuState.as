@@ -131,7 +131,7 @@ package
 				loadTheUniverse();
 				
 				Main.spaceScreen.loadSystem(Main.getObjectByID(0, Main.allSystems) as SpaceSystem);
-				Main.spaceScreen.remove(this, true);
+				Main.spaceScreen.dialogLayer.remove(this, true);
 				Main.spaceScreen.unfreeze();
 				this.destroy();
 			}

@@ -10,17 +10,34 @@ package
 	 */
 	public class SpaceState extends FlxState {
 		
-		
-		/**
-		 * Number of stars to display on the screen at any given time.
-		 */
-		private const NUM_STARS:int = 50;
+		// ####################### Constants ###################### //
 		
 		/**
 		 * Distance from system center at which a ship my enter hyperspace. This number *1.25 is also the distance at which
 		 * they jump into the system.
 		 */
 		public const STD_JUMP_DISTANCE:Number = 1000;
+		
+		// ##################### Layers ######################### //
+		
+		/**
+		 * Array of stars displayed on screen.
+		 */
+		public var starList:FlxGroup;
+		
+		public var planetLayer:FlxGroup;
+		
+		public var asteroidLayer:FlxGroup;
+		
+		public var shipsLayer:FlxGroup;
+		
+		public var projectileLayer:FlxGroup;
+		
+		public var messageLayer:FlxGroup;
+		
+		public var dialogLayer:FlxGroup;
+		
+		// #############################    ################################## //
 		
 		/**
 		 * set at the first update() cycle; the game's main playing field is initialized and the main menu is opened.
@@ -32,10 +49,7 @@ package
 		 */
 		public var player:Player;
 		
-		/**
-		 * Array of stars displayed on screen.
-		 */
-		public var starList:FlxGroup;
+		
 		
 		/**
 		 * Array of planets, space stations, and the like for ships to land on.
@@ -78,6 +92,11 @@ package
 		public var currentSystem:SpaceSystem;
 		
 		/**
+		 * Camera for the entire screen, used mainly by dialog screens and MainMenuState.
+		 */
+		public var fullScreenCam:FlxCamera;
+		
+		/**
 		 * Camera for the main viewport.
 		 */
 		public var viewPortCam:FlxCamera;
@@ -112,23 +131,34 @@ package
 		
 		[Embed(source = "data/test.txt", mimeType = "application/octet-stream")]private var textFile:Class;
 		
-		/**
-		 * Called when the game first starts up. Creates all the global variable holders
-		 */
-		override public function create():void {
+		public function SpaceState() {
 			
-			// ############# Initialize Global Stuff ############
 			Main.spaceScreen = this; // This needs to come first, since other methods may reference the spaceScreen.
+			Star.parent = this;
+			
+			// Create layer FlxGroups
+			
+			starList = new FlxGroup();
+			planetLayer = new FlxGroup();
+			asteroidLayer = new FlxGroup();
+			shipsLayer = new FlxGroup();
+			projectileLayer = new FlxGroup();
+			messageLayer = new FlxGroup();
+			dialogLayer = new FlxGroup();
+			
+			// Set up the cameras.
 			
 			viewPortCam = new FlxCamera(0, 0, FlxG.width - HUD.HUD_WIDTH, FlxG.height, 1);
 			Main.viewport = new Array(viewPortCam);
+			
 			radarCam = new FlxCamera(FlxG.width - HUD.HUD_WIDTH + 10, 10, 111, 111, 1); //width and height need to be odd numbers or objects will jitter.
 			Main.radar = new Array(radarCam);
+			
 			minimapCam = new FlxCamera(FlxG.width - HUD.HUD_WIDTH - 125, 0, 125, 125, 1);
 			mapCam = new FlxCamera(25, 25, viewPortCam.width - 25, FlxG.height - 25, 1);
 			Main.map = new Array(minimapCam, mapCam);
 			
-			
+			// Prep the static parts of the universe.
 			
 			Main.messageLog = new FlxGroup();
 			Main.initMissionFlags();
@@ -137,10 +167,17 @@ package
 			Main.generatePlanets();
 			
 			
+		}
+		
+		/**
+		 * Called when the game first starts up. Starts the MainMenuState.
+		 */
+		override public function create():void {
 			
-			dialogScreen = new MainMenuState();
-			dialogScreen.create();
-			add(dialogScreen);
+			add(dialogLayer);
+			var startMenu:MainMenuState = new MainMenuState();
+			startMenu.create();
+			dialogLayer.add(startMenu);
 			
 			mapOn = false;
 			
@@ -219,7 +256,7 @@ package
 			
 			super.update();
 			if (initialized) {
-				checkStarsOnScreen();
+				Star.checkStarsOnScreen();
 				updateDisplayedMessages();
 				
 				if (FlxG.keys.justPressed("P")) {
@@ -232,7 +269,7 @@ package
 					}
 				}
 				if (FlxG.keys.justPressed("Z")) {
-					resetStars();
+					Star.resetStars();
 				}
 				
 				if (FlxG.keys.justPressed("M")) {
@@ -257,93 +294,6 @@ package
 			}
 		}
 		
-		
-		/**
-		 * Checks for off-screen stars, then replaces them with new ones depending on the player's direction and the star's position.
-		 */
-		private function checkStarsOnScreen():void {
-			for (var i:int = 0; i < starList.length; i++) {
-				var star:Star = starList.members[i];
-				if (star != null && !star.onScreen(viewPortCam)) {
-					var point:FlxPoint = star.getScreenXY(null,viewPortCam);
-					//star.kill();
-					
-					if (player.ship.velocity.x > 0 && point.x < 0) {
-						star = spawnStarRight();
-					} else if (player.ship.velocity.x < 0 && point.x > viewPortCam.width) {
-						star = spawnStarLeft();
-					} else if (player.ship.velocity.y > 0 && point.y < 0) {
-						star = spawnStarBottom();
-					} else if (player.ship.velocity.y < 0 && point.y > viewPortCam.height) {
-						star = spawnStarTop();
-					}
-					starList.members[i] = star;
-					point = null;
-				}
-				
-			}
-		}
-		
-		/**
-		 * Generates a star along the top of the screen.
-		 * @return The star generated.
-		 */
-		private function spawnStarTop():Star {
-			var star:Star = new Star(0, 0);
-			star.x = (viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * viewPortCam.width);
-			star.y = (viewPortCam.scroll.y) * star.scrollFactor.y;
-			return star;
-		}
-		/**
-		 * Generates a star along the left of the screen.
-		 * @return The star generated.
-		 */
-		private function spawnStarLeft():Star {
-			var star:Star = new Star(0, 0);
-			star.x = (viewPortCam.scroll.x) * star.scrollFactor.x;
-			star.y = (viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * viewPortCam.height);
-			return star;
-		}
-		/**
-		 * Generates a star along the bottom of the screen.
-		 * @return The star generated.
-		 */
-		private function spawnStarBottom():Star {
-			var star:Star = new Star(0, 0);
-			star.x = (viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * viewPortCam.width) ;
-			star.y = (viewPortCam.scroll.y * star.scrollFactor.y) + viewPortCam.height;
-			return star;
-		}
-		/**
-		 * Generates a star along the right of the screen.
-		 * @return The star generated.
-		 */
-		private function spawnStarRight():Star {
-			var star:Star = new Star(0, 0);
-			star.x = (viewPortCam.scroll.x * star.scrollFactor.x) + viewPortCam.width;
-			star.y = (viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * viewPortCam.height);
-			return star;
-		}
-		
-		/**
-		 * Internal function used to reset the star field whenever the player takes off or changes systems.
-		 */
-		private function resetStars():void {
-			if (starList == null) {
-				starList = new FlxGroup();
-				trace("new starList");
-			}
-			while (starList.length > 0) { // Clear out any existing stars first
-				//trace(starList.length);
-				starList.remove(starList.members[0], true);
-			}
-			for (var i:int = 0; i < NUM_STARS; i++) { // Then create NUM_STARS new stars on the visible screen.
-				var star:Star = new Star(0, 0);
-				star.x = (viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * viewPortCam.width);
-				star.y = (viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * viewPortCam.height);
-				starList.add(star);
-			}
-		}
 		
 		/**
 		 * Called every update, this function deals with the updated messages - mostly making them fade when their lifespan is up.
@@ -424,7 +374,7 @@ package
 			player.forgetTargetPlanet();
 			player.shipTarget = null;
 			
-			resetStars();
+			Star.resetStars();
 			
 			// generate and load any ships in the system.
 		}
@@ -496,7 +446,7 @@ package
 		 * Unpauses everything going on in space. Used whenever closing a dialog.
 		 */
 		public function unfreeze():void {
-			if(initialized) {
+			if(initialized && dialogLayer.length < 1) {
 				frozen = false;
 				player.ship.active = !frozen;
 				starList.active = !frozen;
