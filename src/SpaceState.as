@@ -25,17 +25,40 @@ package
 		 */
 		public var starList:FlxGroup;
 		
+		/**
+		 * Layer the planets are displayed in.
+		 */
 		public var planetLayer:FlxGroup;
 		
+		/**
+		 * Layer the asteroids and debris are displayed in.
+		 */
 		public var asteroidLayer:FlxGroup;
 		
+		/**
+		 * Layer the ships are displayed in, including the player's ship.
+		 */
 		public var shipsLayer:FlxGroup;
 		
+		/**
+		 * Layer in which projectiles are displayed.
+		 */
 		public var projectileLayer:FlxGroup;
 		
+		/**
+		 * Layer messages are displayed in.
+		 */
 		public var messageLayer:FlxGroup;
 		
+		/**
+		 * Layer the dialog screens are displayed in.
+		 */
 		public var dialogLayer:FlxGroup;
+		
+		/**
+		 * Layer the map's elements are displayed in - systems and the lines connecting them.
+		 */
+		public var mapLayer:FlxGroup;
 		
 		// #############################    ################################## //
 		
@@ -55,26 +78,6 @@ package
 		 * Array of planets, space stations, and the like for ships to land on.
 		 */
 		public var planetList:FlxGroup;
-		
-		/**
-		 * Backlog of messages displayed during gameplay.
-		 */
-		public var messageLog:FlxGroup;
-		
-		/**
-		 * Bottom-most line of in-game message text, the most recent item.
-		 */
-		public var message1:FlxText;
-		
-		/**
-		 * Bottom-most line of in-game message text, the second-most recent item.
-		 */
-		public var message2:FlxText;
-		
-		/**
-		 * Bottom-most line of in-game message text, the oldest of the three messages.
-		 */
-		public var message3:FlxText;
 		
 		/**
 		 * Keeps track of whether things are going on in Space. Set to false when dialog boxes and windows are open.
@@ -160,7 +163,6 @@ package
 			
 			// Prep the static parts of the universe.
 			
-			Main.messageLog = new FlxGroup();
 			Main.initMissionFlags();
 			Main.generateProtoships();
 			Main.generateSystems();
@@ -220,17 +222,8 @@ package
 			
 			add(Main.allSystems);
 			
-			messageLog = Main.messageLog;
-			add(messageLog);
-			message1 = new FlxText(15, FlxG.height - 25, FlxG.width - 30, "");
-			message1.scrollFactor = new FlxPoint(0, 0);
-			add(message1);
-			message2 = new FlxText(15, FlxG.height - 40, FlxG.width - 30, "");
-			message2.scrollFactor = new FlxPoint(0, 0);
-			add(message2);
-			message3 = new FlxText(15, FlxG.height - 55, FlxG.width - 30, "");
-			message3.scrollFactor = new FlxPoint(0, 0);
-			add(message3);
+			add(SpaceMessage.messageLog);
+			
 			
 			//Initialize Player (later to be the Player's ship).
 			
@@ -257,7 +250,7 @@ package
 			super.update();
 			if (initialized) {
 				Star.checkStarsOnScreen();
-				updateDisplayedMessages();
+				SpaceMessage.updateDisplayedMessages();
 				
 				if (FlxG.keys.justPressed("P")) {
 					if(dialogScreen == null && !mapOn) {
@@ -292,49 +285,6 @@ package
 					}
 				}
 			}
-		}
-		
-		
-		/**
-		 * Called every update, this function deals with the updated messages - mostly making them fade when their lifespan is up.
-		 */
-		private function updateDisplayedMessages():void {
-			var numMessages:int = messageLog.length;
-			if (numMessages > 2) {
-				var m3:SpaceMessage = messageLog.members[numMessages - 3]
-				if (m3.getLife() <= 0 && message3.alpha > 0) {
-					message3.alpha -= FlxG.elapsed;
-				}
-			}
-			if (numMessages > 1) {
-				var m2:SpaceMessage = messageLog.members[numMessages - 2]
-				if (m2.getLife() <= 0 && message2.alpha > 0) {
-					message2.alpha -= FlxG.elapsed;
-				}
-			}
-			if (numMessages > 0) {
-				var m1:SpaceMessage = messageLog.members[numMessages - 1]
-				if (m1.getLife() <= 0 && message1.alpha > 0) {
-					message1.alpha -= FlxG.elapsed;
-				}
-			}
-		}
-		
-		/**
-		 * Puts a new message on the screen, bumps old messages up the line, and adds the message to the backlog.
-		 * @param	message
-		 */
-		public function newMessage(message:SpaceMessage):void {
-			messageLog.add(message);
-			message3.text = message2.text;
-			message3.color = message2.color;
-			message3.alpha = message2.alpha;
-			message2.text = message1.text;
-			message2.color = message1.color;
-			message2.alpha = message1.alpha;
-			message1.alpha = 1;
-			message1.text = message.getString();
-			message1.color = message.getColor();
 		}
 		
 		/**
@@ -406,7 +356,7 @@ package
 			player.ship.velocity.y = 0;
 			player.ship.facingAngle = Math.random() * 2 * Math.PI;
 			loadSystem(to);
-			newMessage(new SpaceMessage("Taking off from " + from.name + " on [date]."));
+			SpaceMessage.push(new SpaceMessage("Taking off from " + from.name + " on [date]."));
 		}
 		
 		
@@ -462,13 +412,6 @@ package
 			starList.destroy();
 			starList = null;
 			planetList = null;
-			messageLog = null;
-			message1.destroy();
-			message1 = null;
-			message2.destroy();
-			message2 = null;
-			message3.destroy();
-			message3 = null;
 			
 			// Call this last.
 			super.destroy();

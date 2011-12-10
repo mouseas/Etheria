@@ -90,10 +90,10 @@ package
 			
 			
 			//clear out the message log when the saved game is loaded.
-			if (Main.messageLog != null ) {
-				Main.messageLog.destroy();
+			if (SpaceMessage.messageLog != null ) {
+				SpaceMessage.messageLog.destroy();
 			}
-			Main.messageLog = new FlxGroup();
+			SpaceMessage.messageLog = new FlxGroup();
 			
 		}
 		

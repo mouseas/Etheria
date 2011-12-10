@@ -139,7 +139,7 @@ package gameObjects {
 					if (MathE.distance(Main.player.ship.getCenter(), getCenter()) < this.width + Main.player.ship.width) {
 						if (Main.player.ship.velSpeed <= Main.player.ship.maxSpeed / 10) {
 							// Successful landing here!
-							parent.newMessage(new SpaceMessage("Landed successfully on " + name + "!"));
+							SpaceMessage.push(new SpaceMessage("Landed successfully on " + name + "!"));
 							
 							Main.spaceScreen.freeze();
 							Main.spaceScreen.dialogScreen = new LandedScreen(this);
@@ -151,17 +151,17 @@ package gameObjects {
 							}
 							
 						} else {
-							parent.newMessage(new SpaceMessage("You are moving too fast to land on " + name + ".", 10, 0xffff9900));
+							SpaceMessage.push(new SpaceMessage("You are moving too fast to land on " + name + ".", 10, 0xffff9900));
 						}
 					} else {
-						parent.newMessage(new SpaceMessage("You too far away to land on " + name + ".", 10, 0xffff9900));
+						SpaceMessage.push(new SpaceMessage("You too far away to land on " + name + ".", 10, 0xffff9900));
 					}
 				} else {
-					parent.newMessage(new SpaceMessage("Initial request to land on " + name + " has been received.", 4));
+					SpaceMessage.push(new SpaceMessage("Initial request to land on " + name + " has been received.", 4));
 					initialLandingRequest = true;
 				}
 			} else {
-				parent.newMessage(new SpaceMessage("Cannot land on " + name + ". " + reason, 10, 0xffff9900));
+				SpaceMessage.push(new SpaceMessage("Cannot land on " + name + ". " + reason, 10, 0xffff9900));
 			}
 		}
 		

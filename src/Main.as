@@ -36,12 +36,6 @@ package {
 		public static var spaceScreen:SpaceState;
 		
 		/**
-		 * Globally-held reference to the message backlog. Should be wiped when loading save games, and maybe saved with
-		 * save games.
-		 */
-		public static var messageLog:FlxGroup;
-		
-		/**
 		 * Holds all the systems in existence. Globally available.
 		 */
 		public static var allSystems:FlxGroup;
