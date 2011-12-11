@@ -1,6 +1,7 @@
 package gameObjects {
 	
-	import org.flixel.*
+	import org.flixel.*;
+	import UIScreens.*;
 	
 	/**
 	 * Planets, space stations, shipyards, and other stellar objects. Anything the player might try to land on should be
@@ -142,9 +143,7 @@ package gameObjects {
 							SpaceMessage.push(new SpaceMessage("Landed successfully on " + name + "!"));
 							
 							Main.spaceScreen.freeze();
-							Main.spaceScreen.dialogScreen = new LandedScreen(this);
-							Main.spaceScreen.add(Main.spaceScreen.dialogScreen);
-							Main.spaceScreen.dialogScreen.create();
+							new LandedScreen(this);
 							if (inhabited) {
 								Main.player.ship.energyCur = Main.player.ship.energyCap;
 								Main.player.ship.shieldCur = Main.player.ship.shieldCap;

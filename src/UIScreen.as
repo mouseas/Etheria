@@ -3,9 +3,13 @@ package {
 	import org.flixel.*;
 	import gameObjects.*;
 	
-	
-	public class UIScreen extends FlxState {
-		
+	/**
+	 * Dialog box and screen base class. Subclasses are defined and used for landing, map, mission text, et cetera. This class
+	 * automatically adds itself to the SpaceScreen, so you only need to declare a new UIScreen object and it will show up
+	 * in front of everything else and pause gameplay.
+	 * @author Martin Carney
+	 */
+	public class UIScreen extends FlxGroup {
 		
 		/**
 		 * Button to close the screen.
@@ -31,15 +35,13 @@ package {
 		 * Constructor.
 		 * @param	backgroundImage What image to use as the background.
 		 */
-		public function UIScreen(backgroundImage:Class) {
+		public function UIScreen(backgroundImage:Class = null) {
+			Main.spaceScreen.dialogScreen = this;
+			Main.spaceScreen.dialogLayer.add(this);
+			
+			cameras = Main.viewport;
+			
 			uiBackgroundImage = backgroundImage;
-			
-		}
-		
-		override public function create():void {
-			super.create();
-			
-			
 			uiBackground = new FlxSprite(0, 0);
 			if (uiBackgroundImage == null) {
 				uiBackground.makeGraphic(400, 300, 0xffaaaaaa);
@@ -55,18 +57,27 @@ package {
 			OKButton.scrollFactor = (Main.NO_SCROLL);
 			add(OKButton);
 			current = true;
-			
 		}
+		
 		
 		/**
 		 * Override this function to control how the screen disappears.
 		 */
 		public function closeScreen():void {
+			Main.spaceScreen.dialogLayer.remove(this, true);
+			if (Main.spaceScreen.dialogLayer.length > 0) {
+				Main.spaceScreen.dialogScreen = Main.spaceScreen.dialogLayer.members[Main.spaceScreen.dialogLayer.length - 1];
+			}
+			Main.spaceScreen.unfreeze();
+			destroy();
 		}
 		
 		override public function update():void {
+			if (!Main.spaceScreen.frozen) {
+				Main.spaceScreen.freeze();
+			}
 			super.update();
-			if (current) {
+			if (Main.spaceScreen.dialogScreen == this) {
 				if (FlxG.keys.justPressed("ESCAPE") || FlxG.keys.justPressed("ENTER")) {
 					closeScreen();
 				}
@@ -76,6 +87,7 @@ package {
 		override public function destroy():void {
 			OKButton.destroy();
 			OKButton = null;
+			//trace("UI screen destroy()");
 			super.destroy();
 		}
 		

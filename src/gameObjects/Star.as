@@ -72,8 +72,8 @@ package gameObjects
 		 * Checks for off-screen stars, then replaces them with new ones depending on the player's direction and the star's position.
 		 */
 		public static function checkStarsOnScreen():void {
-			for (var i:int = 0; i < parent.starList.length; i++) {
-				var star:Star = parent.starList.members[i];
+			for (var i:int = 0; i < parent.starLayer.length; i++) {
+				var star:Star = parent.starLayer.members[i];
 				if (star != null && !star.onScreen(parent.viewPortCam)) {
 					var point:FlxPoint = star.getScreenXY(null,parent.viewPortCam);
 					//star.kill();
@@ -87,7 +87,7 @@ package gameObjects
 					} else if (Main.player.ship.velocity.y < 0 && point.y > parent.viewPortCam.height) {
 						star = spawnStarTop();
 					}
-					parent.starList.members[i] = star;
+					parent.starLayer.members[i] = star;
 					point = null;
 				}
 				
@@ -98,19 +98,19 @@ package gameObjects
 		 * Internal function used to reset the star field whenever the player takes off or changes systems.
 		 */
 		public static function resetStars():void {
-			if (parent.starList == null) {
-				parent.starList = new FlxGroup();
+			if (parent.starLayer == null) {
+				parent.starLayer = new FlxGroup();
 				trace("new starList");
 			}
-			while (parent.starList.length > 0) { // Clear out any existing stars first
+			while (parent.starLayer.length > 0) { // Clear out any existing stars first
 				//trace(starList.length);
-				parent.starList.remove(parent.starList.members[0], true);
+				parent.starLayer.remove(parent.starLayer.members[0], true);
 			}
 			for (var i:int = 0; i < NUM_STARS; i++) { // Then create NUM_STARS new stars on the visible screen.
 				var star:Star = new Star(0, 0);
 				star.x = (parent.viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * parent.viewPortCam.width);
 				star.y = (parent.viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * parent.viewPortCam.height);
-				parent.starList.add(star);
+				parent.starLayer.add(star);
 			}
 		}
 		

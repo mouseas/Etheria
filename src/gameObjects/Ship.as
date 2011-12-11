@@ -12,6 +12,11 @@ package gameObjects
 	public class Ship extends FlxSprite {
 		
 		/**
+		 * Originals of each type of ship.
+		 */
+		public static var prototypes:FlxGroup = new FlxGroup();
+		
+		/**
 		 * The ship's sprite image.
 		 */
 		public var _shipSprite:Class;
@@ -196,7 +201,7 @@ package gameObjects
 		 * @param _parent The screen this ship is on.
 		 * @param typeID What protoship ID to load when creating this ship.
 		 */
-		public function Ship(_parent:*, typeID:uint):void {
+		public function Ship(_parent:SpaceState, typeID:uint):void {
 			super(0, 0);
 			playerControlled = false;
 			parent = _parent;
@@ -222,6 +227,28 @@ package gameObjects
 			
 			loadGraphic(_shipSprite, true);
 			
+		}
+		
+		/**
+		 * Creates a ship from its prototype.
+		 * @param	ID The ID of the ship to clone.
+		 * @return     The resulting ship cloned from its prototype.
+		 */
+		public static function cloneShip(_ID:uint):Ship {
+			var result:Ship = new Ship(Main.spaceScreen, _ID);
+			var prototype:Ship = prototypes[_ID];
+			if (prototype == null) {
+				trace ("Invalid prototype ship id " + _ID + ". Copying ship ID 0.");
+				prototype = prototypes[0];
+				if (prototype == null) {
+					trace ("FATAL ERROR: Failed to load ships data.");
+				}
+			} 
+			
+			// Copy values from prototype to result.
+			// Make sure to clone base outfits and to create a new cargo hold FlxGroup rather than copying.
+			
+			return result;
 		}
 		
 		override public function preUpdate():void {

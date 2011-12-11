@@ -51,16 +51,17 @@ package {
 		public function SpaceMessage(_str:String, _lifeSpan:Number = 10, _color:uint = 0xffffffff) {
 			if (!initialized) {
 				message1.scrollFactor = Main.NO_SCROLL;
-				Main.spaceScreen.add(message1);
+				Main.spaceScreen.messageLayer.add(message1);
 				message2.scrollFactor = Main.NO_SCROLL;
-				Main.spaceScreen.add(message2);
+				Main.spaceScreen.messageLayer.add(message2);
 				message3.scrollFactor = Main.NO_SCROLL;
-				Main.spaceScreen.add(message3);
+				Main.spaceScreen.messageLayer.add(message3);
 			}
 			super();
 			str = _str;
 			life = _lifeSpan;
 			color = _color;
+			cameras = Main.viewport;
 			
 		}
 		

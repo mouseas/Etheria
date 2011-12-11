@@ -1,7 +1,8 @@
 package
 {
-	import org.flixel.*
-	import gameObjects.*
+	import org.flixel.*;
+	import gameObjects.*;
+	import UIScreens.*;
 	
 	/**
 	 * This is the main playing screen.
@@ -23,7 +24,7 @@ package
 		/**
 		 * Array of stars displayed on screen.
 		 */
-		public var starList:FlxGroup;
+		public var starLayer:FlxGroup;
 		
 		/**
 		 * Layer the planets are displayed in.
@@ -51,6 +52,16 @@ package
 		public var messageLayer:FlxGroup;
 		
 		/**
+		 * Superlayer with all the layers of the playing field. Used to freeze / unfreeze game action.
+		 */
+		public var playingField:FlxGroup;
+		
+		/**
+		 * Layer that radar objects are displayed in.
+		 */
+		public var radarLayer:FlxGroup;
+		
+		/**
 		 * Layer the dialog screens are displayed in.
 		 */
 		public var dialogLayer:FlxGroup;
@@ -65,14 +76,17 @@ package
 		/**
 		 * set at the first update() cycle; the game's main playing field is initialized and the main menu is opened.
 		 */
-		public var initialized:Boolean;
+		public var initialized:Boolean = false;
 		
 		/**
 		 * Player sprite
 		 */
 		public var player:Player;
 		
-		
+		/**
+		 * What day, month, and year it is in-game.
+		 */
+		public var date:Date;
 		
 		/**
 		 * Array of planets, space stations, and the like for ships to land on.
@@ -87,7 +101,7 @@ package
 		/**
 		 * screen to display over current playscreen. When null, nothing should be displayed.
 		 */
-		public var dialogScreen:FlxState;
+		public var dialogScreen:FlxGroup;
 		
 		/**
 		 * Which system is currently displayed.
@@ -140,14 +154,15 @@ package
 			Star.parent = this;
 			
 			// Create layer FlxGroups
-			
-			starList = new FlxGroup();
+			starLayer = new FlxGroup();
 			planetLayer = new FlxGroup();
 			asteroidLayer = new FlxGroup();
 			shipsLayer = new FlxGroup();
 			projectileLayer = new FlxGroup();
+			playingField = new FlxGroup();
 			messageLayer = new FlxGroup();
 			dialogLayer = new FlxGroup();
+			radarLayer = new FlxGroup();
 			
 			// Set up the cameras.
 			
@@ -176,61 +191,60 @@ package
 		 */
 		override public function create():void {
 			
+			//Layers
+			add(playingField);
+			playingField.add(starLayer);
+			playingField.add(planetLayer);
+			playingField.add(asteroidLayer);
+			playingField.add(shipsLayer);
+			playingField.add(projectileLayer);
+			add(messageLayer);
+			add(radarLayer);
 			add(dialogLayer);
+			
+			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
 			startMenu.create();
 			dialogLayer.add(startMenu);
 			
-			mapOn = false;
-			
-			initialized = false;
-			
+			mapOn = false; // Might want to just get rid of this once dialog boxes are properly implemented.
 			
 		}
 		
 		/**
-		 * What would normally be in the create() method; this actually puts the playing field together before starting play.
+		 * What would normally be in the create() method in other Flixel games; this actually puts the playing 
+		 * field together before starting play.
 		 */
 		public function initPlayingField():void {
 			
-			//Temp code to test importing information from text files.
-			/*var fileContent:String = new textFile();
-			var result:Array = fileContent.split('\n');
-			for (var i:int = 0; i < result.length; i++) {
-				trace(i + " " + result[i]);
-			}*/
+			Main.player = player = new Player(this);
+			date = new Date(2142, 7, 22);
 			
-			Main.player = new Player(this);
-			player = Main.player;
 			
 			frozen = false;
-			if (dialogScreen != null) {
+			
+			/*if (dialogScreen != null) {
 				dialogScreen.destroy();
 			}
-			dialogScreen = null;
+			dialogScreen = null;*/
 			
 			FlxG.addCamera(viewPortCam);
 			FlxG.addCamera(radarCam);
 			
-			// Layers
-			starList = new FlxGroup();
-			starList.cameras = Main.viewport;
-			add(starList);
-			
 			planetList = new FlxGroup();
-			add(planetList);
+			planetLayer.add(planetList);
 			
-			add(Main.allSystems);
+			//add(Main.allSystems); // remove this once the map UIScreen is implemented.
 			
 			add(SpaceMessage.messageLog);
 			
 			
-			//Initialize Player (later to be the Player's ship).
+			//Initialize the Player and their ship).
 			
 			player.ship.x = (Math.random() * 500) - 250;
 			player.ship.y = (Math.random() * 500) - 250;
 			add(player);
-			add(player.ship);
+			shipsLayer.add(player.ship);
 			viewPortCam.follow(player.ship);
 			viewPortCam.update(); // This makes the camera move to cover the player so stars are generated on-screen.
 			
@@ -261,27 +275,28 @@ package
 						}
 					}
 				}
-				if (FlxG.keys.justPressed("Z")) {
-					Star.resetStars();
-				}
-				
-				if (FlxG.keys.justPressed("M")) {
-					if (mapOn) {
-						mapOn = false;
-						unfreeze();
-						FlxG.removeCamera(mapCam, false);
-					} else {
-						mapOn = true;
-						freeze();
-						FlxG.addCamera(mapCam);
+				if (!frozen) {
+					if (FlxG.keys.justPressed("Z")) {
+						if (currentSystem == Main.allSystems.members[0]) {
+							loadSystem(Main.allSystems.members[1]);
+						} else {
+							loadSystem(Main.allSystems.members[0]);
+						}
 					}
-				}
-				
-				if (FlxG.keys.justPressed("SLASH")) {
-					if (FlxG.timeScale > 1) {
-						FlxG.timeScale = 1;
-					} else {
-						FlxG.timeScale = 2;
+					if (FlxG.keys.justPressed("BACKSLASH")) {
+						new UIScreen();
+					}
+					
+					if (FlxG.keys.justPressed("M")) {
+						new mapScreen();
+					}
+					
+					if (FlxG.keys.justPressed("SLASH")) {
+						if (FlxG.timeScale > 1) {
+							FlxG.timeScale = 1;
+						} else {
+							FlxG.timeScale = 2;
+						}
 					}
 				}
 			}
@@ -292,22 +307,23 @@ package
 		 * @param	s System to load.
 		 */
 		public function loadSystem(s:SpaceSystem):void {
+			date.date++;
 			for (var i:int = 0; i < planetList.length; i++) {
 				var p:Planet = planetList.members[i];
 				if (p != null) {
 					//trace("Removing radar object for " + p.name);
-					remove(p.radarCircle, true);
+					radarLayer.remove(p.radarCircle, true);
 				}
 				p = null;
 			}
 			currentSystem = s;
-			replace(planetList, currentSystem.planetList); // replaces it in the display position (draw order)
+			planetLayer.replace(planetList, currentSystem.planetList); // replaces it in the display position (draw order)
 			planetList = currentSystem.planetList; // replaces the object reference
 			for (i = 0; i < planetList.length; i++) {
 				p = planetList.members[i];
 				if (p != null) {
 					//trace("Adding radar object for " + p.name);
-					add(p.radarCircle);
+					radarLayer.add(p.radarCircle);
 				}
 				p = null;
 			}
@@ -345,7 +361,7 @@ package
 		 * Called when the player takes off from a planet (or when the game is loaded, based on
 		 * the planet they saved on).
 		 * @param	from The Planet they're leaving
-		 * @param	to The system they're entering. This should be the Planet's sytem in normal cases.
+		 * @param	to The system they're entering. This should be the Planet's system in normal cases.
 		 */
 		public function takeOff(from:Planet, to:SpaceSystem):void {
 			var _x:Number = from.getCenter().x - (player.ship.width / 2);
@@ -356,7 +372,7 @@ package
 			player.ship.velocity.y = 0;
 			player.ship.facingAngle = Math.random() * 2 * Math.PI;
 			loadSystem(to);
-			SpaceMessage.push(new SpaceMessage("Taking off from " + from.name + " on [date]."));
+			SpaceMessage.push(new SpaceMessage("Taking off from " + from.name + " on " + date + "."));
 		}
 		
 		
@@ -387,8 +403,7 @@ package
 			if(initialized) {
 				frozen = true;
 				player.ship.active = !frozen;
-				starList.active = !frozen;
-				planetList.active = !frozen;
+				playingField.active = !frozen;
 			}
 		}
 		
@@ -399,23 +414,10 @@ package
 			if(initialized && dialogLayer.length < 1) {
 				frozen = false;
 				player.ship.active = !frozen;
-				starList.active = !frozen;
-				planetList.active = !frozen;
+				playingField.active = !frozen;
 			}
 		}
 		
-		/**
-		 * nulls out variables specific to Planets, then calls destroy() from the super class.
-		 */
-		override public function destroy():void {
-			player = null;
-			starList.destroy();
-			starList = null;
-			planetList = null;
-			
-			// Call this last.
-			super.destroy();
-		}
 	}
 	
 }
