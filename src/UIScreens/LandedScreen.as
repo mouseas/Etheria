@@ -25,8 +25,8 @@ package UIScreens {
 		}
 		
 		override public function destroy():void {
-			trace("landed screen destroy()");
-			//planet = null;
+			//trace("landed screen destroy()");
+			planet = null;
 			super.destroy();
 		}
 		

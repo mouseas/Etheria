@@ -179,7 +179,7 @@ package
 			// Prep the static parts of the universe.
 			
 			Main.initMissionFlags();
-			Main.generateProtoships();
+			Ship.generatePrototypes();
 			Main.generateSystems();
 			Main.generatePlanets();
 			
@@ -244,10 +244,9 @@ package
 			player.ship.x = (Math.random() * 500) - 250;
 			player.ship.y = (Math.random() * 500) - 250;
 			add(player);
-			shipsLayer.add(player.ship);
+			player.ship.addToScreen();
 			viewPortCam.follow(player.ship);
 			viewPortCam.update(); // This makes the camera move to cover the player so stars are generated on-screen.
-			
 			
 			hud = new HUD();
 			hud.create();

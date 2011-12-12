@@ -41,7 +41,7 @@ package gameObjects
 			
 			this.makeGraphic(1, 1, 0x00000000);
 			
-			ship = new Ship(screen, 0);
+			ship = Ship.cloneShip(0);
 			screen.radarCam.follow(ship.radarDot);
 			ship.playerControlled = true;
 			

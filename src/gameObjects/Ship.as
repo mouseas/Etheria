@@ -11,10 +11,36 @@ package gameObjects
 	 */
 	public class Ship extends FlxSprite {
 		
+		// ####################### Prototypes ############################# //
+		
+		/**
+		 * File containing all the data for existing ship types.
+		 */
+		[Embed(source = "../data/ships.txt", mimeType = "application/octet-stream")]public static var shipTypeDataFile:Class;
+		
+		/**
+		 * Counter to keep track of where in the file to start parsing each ship.
+		 */
+		public static var _i:int = 0;
+		
+		/**
+		 * Array that holds Strings read from the lines of ships.txt.
+		 */
+		public static var shipDataStrings:Array;
+		
 		/**
 		 * Originals of each type of ship.
 		 */
 		public static var prototypes:FlxGroup = new FlxGroup();
+		
+		/**
+		 * How many types of ship there are. When Main makes all the protoships, it runs a for loop this number of times
+		 * and calls out each ID case. If there is a blank slot, a shuttlecraft will be loaded and an error message
+		 * given to the console.
+		 */
+		public static const NUM_SHIP_TYPES:uint = 3;
+		
+		// ######################## Unit Variables ######################## //
 		
 		/**
 		 * The ship's sprite image.
@@ -29,10 +55,10 @@ package gameObjects
 		/**
 		 * Number of images in the sprite sheet. First image should be facing 0 degrees, to the right.
 		 */
-		public const NUM_FRAMES:int = 36;
+		public var NUM_FRAMES:int = 36;
 		
 		/**
-		 * Is this the player's ship?
+		 * Is this the player's ship? If true, skip all AI processes.
 		 */
 		public var playerControlled:Boolean;
 		
@@ -207,25 +233,52 @@ package gameObjects
 			parent = _parent;
 			cameras = Main.viewport;
 			
-			var proto:Protoship = Main.protoships.members[typeID];
-			proto.newShipBuy(this);
-			proto = null;
+			//var proto:Protoship = Main.protoships.members[typeID];
+			//proto.newShipBuy(this);
+			//proto = null;
 			
 			facingAngle = Math.random() * Math.PI * 2;
 			
 			cargoHold = new FlxGroup(); // If cargo isn't transferring to a new ship, this is why.
 			
-			//All things mass
+			//Prime the mass variables so you don't have uninitialized numbers.
 			cargoMass = 0;
 			modMass = 0;
 			calculateMass();
 			
+			//Make the radarDot (but don't add it yet).
 			radarDot = new FlxSprite(x / Main.RADAR_ZOOM, y / Main.RADAR_ZOOM);
 			radarDot.makeGraphic(1, 1, 0xff8888ff);
 			radarDot.cameras = Main.radar;
-			parent.add(radarDot);
 			
-			loadGraphic(_shipSprite, true);
+			//loadGraphic(_shipSprite, true); // This is done when the prototype is cloned.
+			
+			mods = new FlxGroup();
+			
+			if (true) {// These are all default values in case a value is missing from the ships.txt data file.
+				name = "Freighter";
+				longName = "Quickster light cargo freighter";
+				_shipSprite = shipSprite0001;
+				baseMass = 14.0;
+				cargoCap = 45
+				modSpace = 15;
+				shieldCap = 170;
+				shieldCur = shieldCap;
+				shieldRecharge = 3.5;
+				armorCap = 40;
+				armorCur = armorCap;
+				structCap = 95;
+				structCur = structCap;
+				fuelCap = 950;
+				fuelCur = fuelCap;
+				fuelBurnRate = 6.5;
+				fuelEfficiency = 1;
+				energyCap = 210;
+				energyCur = energyCap;
+				maxSpeed = 85;
+				rcs = 1.3;
+				thrustPower = 140;
+			}
 			
 		}
 		
@@ -236,19 +289,118 @@ package gameObjects
 		 */
 		public static function cloneShip(_ID:uint):Ship {
 			var result:Ship = new Ship(Main.spaceScreen, _ID);
-			var prototype:Ship = prototypes[_ID];
+			var prototype:Ship = prototypes.members[_ID];
+			
+			//Make sure we're cloning a valid prototype first.
 			if (prototype == null) {
+				// If not, clone a shuttlecraft and send an error.
 				trace ("Invalid prototype ship id " + _ID + ". Copying ship ID 0.");
 				prototype = prototypes[0];
 				if (prototype == null) {
+					// If shuttlecraft didn't load either, then ship data probably was not loaded.
 					trace ("FATAL ERROR: Failed to load ships data.");
 				}
 			} 
+			
+			//Copy most values. Mods need to be cloned rather than pointed, and the prototype's graphic needs to be loaded.
+			result._shipSprite = prototype._shipSprite;
+			result.NUM_FRAMES = prototype.NUM_FRAMES;
+			result.loadGraphic(result._shipSprite, true);
+			result.name = prototype.name;
+			result.longName = prototype.longName;
+			result.rcs = prototype.rcs;
+			result.thrustPower = prototype.thrustPower;
+			result.maxSpeed = prototype.maxSpeed;
+			result.shieldCap = prototype.shieldCap;
+			result.shieldCur = prototype.shieldCur;
+			result.shieldRecharge = prototype.shieldRecharge;
+			result.armorCap = prototype.armorCap;
+			result.armorCur = prototype.armorCur;
+			result.structCap = prototype.structCap;
+			result.structCur = prototype.structCur;
+			result.fuelCap = prototype.fuelCap;
+			result.fuelCur = prototype.fuelCur;
+			result.fuelBurnRate = prototype.fuelBurnRate;
+			result.fuelEfficiency = prototype.fuelEfficiency;
+			result.energyCap = prototype.energyCap;
+			result.energyCur = prototype.energyCur;
+			result.cargoCap = prototype.cargoCap;
+			result.cargoCur = prototype.cargoCur;
+			result.totalMass = prototype.totalMass;
+			result.baseMass = prototype.baseMass;
+			result.cargoMass = prototype.cargoMass;
+			result.modMass = prototype.modMass;
+			result.modSpace = prototype.modSpace;
+			
+			for (var i:int = 0; i < prototype.mods.length; i++) {
+				trace(i);
+				//result.mods.add(prototype.mods.members[i].clone()); // Need to implement mods with a clone() method.
+			}
 			
 			// Copy values from prototype to result.
 			// Make sure to clone base outfits and to create a new cargo hold FlxGroup rather than copying.
 			
 			return result;
+		}
+		
+		public static function generatePrototypes():void {
+			trace("Generating Ship Prototypes.");
+			var fileContent:String = new shipTypeDataFile();
+			shipDataStrings = fileContent.split('\n');
+			
+			if (prototypes != null) {
+				prototypes.destroy();
+				prototypes = null;
+			}
+			prototypes = new FlxGroup();
+			for (var i:uint = 0; i < Protoship.NUM_SHIP_TYPES; i++) {
+				prototypes.add(parseShipFromText(shipDataStrings,_i));
+			}
+			trace("Generating Ship Prototypes...Done. Total: " + prototypes.length);
+		}
+		
+		
+		[Embed(source = "../../lib/ship-0000.png")]private var shipSprite0000:Class;
+		[Embed(source = "../../lib/ship-0001.png")]private var shipSprite0001:Class;
+		
+		/**
+		 * Passing in the string array, this will create a Protoship from the data starting at startLine.
+		 * @param	array The entire array of strings to pull strings from in order to parse them.
+		 * @param	startLine Which index in the array to start at.
+		 * @return The finished Protoship. Any variables not defined in the ships.txt file for that entry will default
+		 * to the values for a freighter, ship type ID 2.
+		 */
+		public static function parseShipFromText(array:Array, startLine:int):Ship {
+			//var NUM_LINES_NEEDED:int = 18;
+			var i:int = startLine;
+			if (startLine < array.length) {
+				//trace(startLine);
+				var _ID:uint = StringParser.readInt(array[i++]);
+				var result:Ship = new Ship(Main.spaceScreen, _ID);
+				var str:String = StringParser.readVarName(array[i]);
+				while (str.indexOf("ID") != 0 && i < array.length) {
+					if (StringParser.readVarName(array[i]).indexOf("spriteImage") > -1) {
+						var newImage:String = StringParser.readValue(array[i]);
+						result._shipSprite = result[newImage];
+					} else if (StringParser.assignValueFromStrings(array[i], result)) {
+						
+					} else {
+						trace("Error at line " + i + ". Contents: " + array[i]);
+					}
+					i++;
+					if(i < array.length) {
+						str = StringParser.readVarName(array[i]);
+					}
+				}
+				_i = i;
+				//trace(result.ID + " " + result.name);
+				return result;
+			} else {
+				trace("Not enough lines left in the file. Index was " + _i);
+				return null;
+			}
+			
+			
 		}
 		
 		override public function preUpdate():void {
@@ -260,7 +412,6 @@ package gameObjects
 		 * Standard update cycle.
 		 */
 		override public function update():void {
-			
 			if (FlxG.keys.N) {
 				shieldCur -= FlxG.elapsed * 15;
 				if (shieldCur < 0) {
@@ -434,10 +585,27 @@ package gameObjects
 		}
 		
 		/**
+		 * Used to add a ship to the screen, along with its radar dot.
+		 */
+		public function addToScreen():void {
+			Main.spaceScreen.shipsLayer.add(this);
+			Main.spaceScreen.radarLayer.add(radarDot);
+		}
+		
+		/**
+		 * Removes a ship and its radar dot from the screen.
+		 */
+		public function removeFromScreen():void {
+			Main.spaceScreen.shipsLayer.remove(this, true);
+			Main.spaceScreen.radarLayer.remove(radarDot, true);
+		}
+		
+		/**
 		 * nulls out variables specific to Ships, then calls destroy() from FlxSprite.
 		 */
 		override public function destroy():void {
-			parent.remove(radarDot, true);
+			parent.radarLayer.remove(radarDot, true);
+			cargoHold = null;
 			radarDot.destroy();
 			radarDot = null;
 			parent = null;

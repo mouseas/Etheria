@@ -82,27 +82,6 @@ package {
 		}
 		
 		
-		
-		
-		/**
-		 * Loads the embedded file ships.txt and parses its values into Protoships.
-		 */
-		public static function generateProtoships():void {
-			trace("Generating Protoships.");
-			var fileContent:String = new shipTypeDataFile();
-			shipDataStrings = fileContent.split('\n');
-			
-			if (protoships != null) {
-				protoships.destroy();
-				protoships = null;
-			}
-			protoships = new FlxGroup();
-			for (var i:uint = 0; i < Protoship.NUM_SHIP_TYPES; i++) {
-				protoships.add(Protoship.parseShipFromText(shipDataStrings,Protoship._i));
-			}
-			trace("Generating Protoships...Done. Total: " + protoships.length);
-		}
-		
 		/**
 		 * Loads the embedded file systems.txt and parses its values into SpaceSystems.
 		 */
@@ -207,16 +186,6 @@ package {
 		
 		
 		// ###################### Embedded data files and corresponding arrays of Strings ##########################
-		
-		/**
-		 * File containing all the data for existing ship types.
-		 */
-		[Embed(source = "data/ships.txt", mimeType = "application/octet-stream")]public static var shipTypeDataFile:Class;
-		
-		/**
-		 * Array that holds Strings read from the lines of ships.txt.
-		 */
-		public static var shipDataStrings:Array;
 		
 		/**
 		 * File containing all the data for existing systems.
