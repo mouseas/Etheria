@@ -57,6 +57,7 @@ package {
 			OKButton.scrollFactor = (Main.NO_SCROLL);
 			add(OKButton);
 			current = true;
+			
 		}
 		
 		
@@ -72,6 +73,9 @@ package {
 			destroy();
 		}
 		
+		/**
+		 * Standard update cycle.
+		 */
 		override public function update():void {
 			if (!Main.spaceScreen.frozen) {
 				Main.spaceScreen.freeze();
@@ -84,6 +88,9 @@ package {
 			}
 		}
 		
+		/**
+		 * Destroys elements in the UIScreen group. Make sure to REMOVE anything that's re-used; leave only elements that get created here!
+		 */
 		override public function destroy():void {
 			OKButton.destroy();
 			OKButton = null;
@@ -91,6 +98,15 @@ package {
 			super.destroy();
 		}
 		
+		/**
+		 * Makes sure any objects added to the screen are in the viewport.
+		 * @param	object Object being added.
+		 * @return Object that was added.
+		 */
+		override public function add(object:FlxBasic):FlxBasic {
+			object.cameras = Main.viewport;
+			return super.add(object);
+		}
 		
 	}
 }

@@ -161,8 +161,9 @@ package
 			projectileLayer = new FlxGroup();
 			playingField = new FlxGroup();
 			messageLayer = new FlxGroup();
-			dialogLayer = new FlxGroup();
 			radarLayer = new FlxGroup();
+			dialogLayer = new FlxGroup();
+			mapLayer = new FlxGroup();
 			
 			// Set up the cameras.
 			
@@ -173,13 +174,16 @@ package
 			Main.radar = new Array(radarCam);
 			
 			minimapCam = new FlxCamera(FlxG.width - HUD.HUD_WIDTH - 125, 0, 125, 125, 1);
-			mapCam = new FlxCamera(25, 25, viewPortCam.width - 25, FlxG.height - 25, 1);
+			mapCam = new FlxCamera(142, 136, 336, 336, 1);
 			Main.map = new Array(minimapCam, mapCam);
+			
+			fullScreenCam = new FlxCamera(0, 0, FlxG.width, FlxG.height, 1);
+			Main.fullScreen = new Array(fullScreenCam);
 			
 			// Prep the static parts of the universe.
 			
 			Main.initMissionFlags();
-			Ship.generatePrototypes();
+			Ship.generateShipPrototypes();
 			Main.generateSystems();
 			Main.generatePlanets();
 			
@@ -201,6 +205,7 @@ package
 			add(messageLayer);
 			add(radarLayer);
 			add(dialogLayer);
+			add(mapLayer);
 			
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
@@ -228,13 +233,12 @@ package
 			}
 			dialogScreen = null;*/
 			
+			FlxG.addCamera(fullScreenCam);
 			FlxG.addCamera(viewPortCam);
 			FlxG.addCamera(radarCam);
 			
 			planetList = new FlxGroup();
 			planetLayer.add(planetList);
-			
-			//add(Main.allSystems); // remove this once the map UIScreen is implemented.
 			
 			add(SpaceMessage.messageLog);
 			
@@ -307,6 +311,8 @@ package
 		 */
 		public function loadSystem(s:SpaceSystem):void {
 			date.date++;
+			
+			//pull radar objects from screen.
 			for (var i:int = 0; i < planetList.length; i++) {
 				var p:Planet = planetList.members[i];
 				if (p != null) {
@@ -315,9 +321,17 @@ package
 				}
 				p = null;
 			}
+			while (shipsLayer.length > 0) {
+				var oldSysShip:Ship = shipsLayer.members[0];
+				oldSysShip.removeFromScreen();
+			}
+			player.ship.addToScreen();
+			
 			currentSystem = s;
 			planetLayer.replace(planetList, currentSystem.planetList); // replaces it in the display position (draw order)
 			planetList = currentSystem.planetList; // replaces the object reference
+			
+			// add radar objects to screen
 			for (i = 0; i < planetList.length; i++) {
 				p = planetList.members[i];
 				if (p != null) {
@@ -340,6 +354,21 @@ package
 			player.shipTarget = null;
 			
 			Star.resetStars();
+			
+			var newShip:Ship = Ship.cloneShip(0);
+			newShip.x = Math.random() * 200;
+			newShip.y = Math.random() * 200;
+			newShip.addToScreen();
+			
+			newShip = Ship.cloneShip(1);
+			newShip.x = Math.random() * 200;
+			newShip.y = Math.random() * 200;
+			newShip.addToScreen();
+			
+			newShip = Ship.cloneShip(2);
+			newShip.x = Math.random() * 200;
+			newShip.y = Math.random() * 200;
+			newShip.addToScreen();
 			
 			// generate and load any ships in the system.
 		}

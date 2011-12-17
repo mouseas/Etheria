@@ -50,6 +50,11 @@ package gameObjects {
 		 */
 		public var _planetLandView:Class;
 		
+		/**
+		 * Image with each size of planet for the radar.
+		 */
+		[Embed(source = "../../lib/planet-radar.png")]public var radarImage:Class;
+		
 		// ############### Variables #################
 		
 		/**
@@ -112,7 +117,7 @@ package gameObjects {
 			cameras = Main.viewport;
 			
 			radarCircle = new FlxSprite(x / Main.RADAR_ZOOM, y / Main.RADAR_ZOOM);
-			radarCircle.makeGraphic(4, 4, 0xff00ff00);
+			radarCircle.loadGraphic(radarImage, true);
 			radarCircle.cameras = Main.radar;
 			
 			name = "New Earth";
@@ -124,10 +129,17 @@ package gameObjects {
 			
 		}
 		
+		/**
+		 * Standard update cycle.
+		 */
 		override public function update():void {
 			super.update();
-			radarCircle.x = x / Main.RADAR_ZOOM;
-			radarCircle.y = y / Main.RADAR_ZOOM;
+			
+			// Keep the radarCircle to the scaled position of the planet (in case the planet ever moves).
+			radarCircle.x = ((x + (width / 2)) / Main.RADAR_ZOOM) - (radarCircle.width / 2);
+			radarCircle.y = ((y + (height / 2)) / Main.RADAR_ZOOM) - (radarCircle.height / 2);
+			
+			// Check to see if the player has clicked on this planet.
 			clickCheck();
 		}
 		
@@ -179,7 +191,7 @@ package gameObjects {
 			if(FlxG.mouse.visible) {
 				var _point:FlxPoint = new FlxPoint();
 				FlxG.mouse.getWorldPosition(parent.viewPortCam,_point);
-				if(overlapsPoint(_point,false,parent.viewPortCam)) {
+				if(overlapsPoint(_point, false, parent.viewPortCam)) {
 					
 					// Mouse is over Planet.
 					
@@ -241,14 +253,39 @@ package gameObjects {
 		[Embed(source = "../../lib/planet001.png")]public var planet001:Class;
 		//[Embed(source = "../../lib/planet002.png")]public var planet002:Class;
 		
+		/**
+		 * Sets and loads the sprite, and makes the radarCircle match the size of the new sprite.
+		 */
 		public function set spriteImage(newImage:Class):void {
 			_spriteImage = newImage;
 			loadGraphic(_spriteImage);
+			var size:int = (int)(width / Main.RADAR_ZOOM);
+			if (size < 2) {
+				radarCircle.frame = 5;
+			} else if (size == 2) {
+				radarCircle.frame = 4;
+			} else if (size == 3) {
+				radarCircle.frame = 3;
+			} else if (size == 4) {
+				radarCircle.frame = 2;
+			} else if (size == 5) {
+				radarCircle.frame = 1;
+			} else {
+				radarCircle.frame = 0;
+			}
 		}
+		
+		/**
+		 * Gets the sprite image.
+		 */
 		public function get spriteImage():Class {
 			return _spriteImage;
 		}
 		
+		/**
+		 * Outputs a useful string for identifying the System when debugging.
+		 * @return String with basic identifying info about the System.
+		 */
 		override public function toString():String {
 			return name + " [ID:" + ID + ", System: " + system.name + "]";
 		}

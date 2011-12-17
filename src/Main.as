@@ -41,6 +41,11 @@ package {
 		public static var allSystems:FlxGroup;
 		
 		/**
+		 * Holds the FlxText objects belonging to the systems used to label them.
+		 */
+		public static var allSystemNames:FlxGroup;
+		
+		/**
 		 * Holds all the Planets in existence. Globally available.
 		 */
 		public static var allPlanets:FlxGroup;
@@ -71,6 +76,11 @@ package {
 		 */
 		public static var map:Array;
 		
+		/**
+		 * Array holding the camera used by anything shown on the whole screen.
+		 */
+		public static var fullScreen:Array;
+		
 		
 		
 		/**
@@ -95,7 +105,12 @@ package {
 				allSystems.destroy();
 				allSystems = null;
 			}
+			if (allSystemNames != null) {
+				allSystemNames.destroy();
+				allSystemNames = null;
+			}
 			allSystems = new FlxGroup();
+			allSystemNames = new FlxGroup();
 			for (var i:uint = 0; i < SpaceSystem.NUM_SYSTEMS; i++) {
 				allSystems.add(SpaceSystem.parseSystemFromText(spaceSystemDataStrings, SpaceSystem._i));
 			}

@@ -343,7 +343,7 @@ package gameObjects
 			return result;
 		}
 		
-		public static function generatePrototypes():void {
+		public static function generateShipPrototypes():void {
 			trace("Generating Ship Prototypes.");
 			var fileContent:String = new shipTypeDataFile();
 			shipDataStrings = fileContent.split('\n');
@@ -403,6 +403,9 @@ package gameObjects
 			
 		}
 		
+		/**
+		 * Pre-update cycle. Currently re-positions the radarDot to match the ship's position, scaled for the radar.
+		 */
 		override public function preUpdate():void {
 			radarDot.x = x / Main.RADAR_ZOOM;
 			radarDot.y = y / Main.RADAR_ZOOM;
@@ -433,7 +436,7 @@ package gameObjects
 			}
 			
 			
-			if (Math.abs(MathE.pythag(velocity.x, velocity.y)) > maxSpeed) {
+			if (Math.abs(velSpeed) > maxSpeed) {
 				//limits the speed of the ship to maxSpeed.
 				velocity.x = Math.cos(velAngle) * maxSpeed;
 				velocity.y = Math.sin(velAngle) * maxSpeed;

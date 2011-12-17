@@ -66,7 +66,7 @@ package gameObjects {
 			
 			nameText = new FlxText(1, 1, 300, _name);
 			nameText.cameras = Main.map;
-			Main.spaceScreen.add(nameText);
+			Main.allSystemNames.add(nameText);
 			
 		}
 		

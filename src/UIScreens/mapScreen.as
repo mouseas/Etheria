@@ -14,12 +14,14 @@ package UIScreens {
 			OKButton.label.text = "Close";
 			
 			add(Main.allSystems);
+			add(Main.allSystemNames);
 			
 			FlxG.addCamera(Main.spaceScreen.mapCam);
 		}
 		
 		override public function closeScreen():void {
 			remove(Main.allSystems, true);
+			remove(Main.allSystemNames, true);
 			FlxG.removeCamera(Main.spaceScreen.mapCam,false)
 			super.closeScreen();
 		}
