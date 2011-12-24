@@ -71,6 +71,11 @@ package
 		 */
 		public var mapLayer:FlxGroup;
 		
+		/**
+		 * Layer the Selectors appear on.
+		 */
+		public var selectorLayor:FlxGroup;
+		
 		// #############################    ################################## //
 		
 		/**
@@ -164,6 +169,7 @@ package
 			radarLayer = new FlxGroup();
 			dialogLayer = new FlxGroup();
 			mapLayer = new FlxGroup();
+			selectorLayor = new FlxGroup();
 			
 			// Set up the cameras.
 			
@@ -206,6 +212,7 @@ package
 			add(radarLayer);
 			add(dialogLayer);
 			add(mapLayer);
+			add(selectorLayor);
 			
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
@@ -359,16 +366,19 @@ package
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
+			trace(newShip);
 			
 			newShip = Ship.cloneShip(1);
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
+			trace(newShip);
 			
 			newShip = Ship.cloneShip(2);
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
+			trace(newShip);
 			
 			// generate and load any ships in the system.
 		}

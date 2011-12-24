@@ -26,10 +26,31 @@ package gameObjects
 		public var shipTarget:Ship;
 		
 		/**
+		 * Selection outline for the current ship target.
+		 */
+		public var shipSelection:Selection;
+		
+		/**
 		 * Planet the player is currently targeting.
 		 */
-		public var planetTarget:Planet;
+		private var _planetTarget:Planet;
 		
+		public function get planetTarget():Planet { return _planetTarget }
+		public function set planetTarget(planet:Planet):void {
+			if (_planetTarget != null) {
+				_planetTarget.loseFocus();
+			}
+			_planetTarget = planet;
+			if (_planetTarget != null) {
+				_planetTarget.getFocus();
+			}
+			
+		}
+		
+		/**
+		 * Selection outline for the current planet target.
+		 */
+		public var planetSelection:Selection;
 		
 		/**
 		 * Constructor function.
@@ -44,7 +65,6 @@ package gameObjects
 			ship = Ship.cloneShip(0);
 			screen.radarCam.follow(ship.radarDot);
 			ship.playerControlled = true;
-			
 		}
 		
 		/**
@@ -129,6 +149,8 @@ package gameObjects
 				planetTarget.loseFocus();
 				planetTarget = null;
 			}
+			
+			Main.spaceScreen.selectorLayor.remove(planetSelection, true);
 		}
 		
 		/**

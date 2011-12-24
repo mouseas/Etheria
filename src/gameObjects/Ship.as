@@ -229,6 +229,7 @@ package gameObjects
 		 */
 		public function Ship(_parent:SpaceState, typeID:uint):void {
 			super(0, 0);
+			ID = typeID;
 			playerControlled = false;
 			parent = _parent;
 			cameras = Main.viewport;
@@ -615,6 +616,14 @@ package gameObjects
 			
 			// Call this last.
 			super.destroy();
+		}
+		
+		/**
+		 * Produces a useful string to identify ships while debugging.
+		 * @return Ship's name and ID.
+		 */
+		override public function toString():String {
+			return "Ship: " + name + " ID: " + ID;
 		}
 	}
 	

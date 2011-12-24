@@ -55,6 +55,11 @@ package gameObjects {
 		 */
 		[Embed(source = "../../lib/planet-radar.png")]public var radarImage:Class;
 		
+		/**
+		 * Selection markers around this object.
+		 */
+		public var selection:Selection;
+		
 		// ############### Variables #################
 		
 		/**
@@ -181,7 +186,13 @@ package gameObjects {
 		 * the player leaves the system.
 		 */
 		public function loseFocus():void {
+			Main.spaceScreen.selectorLayor.remove(selection, true);
 			initialLandingRequest = false;
+		}
+		
+		public function getFocus():void {
+			selection = new Selection(this);
+			Main.spaceScreen.selectorLayor.add(selection);
 		}
 		
 		/**
