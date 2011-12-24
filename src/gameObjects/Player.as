@@ -21,21 +21,43 @@ package gameObjects
 		public var ship:Ship;
 		
 		/**
-		 * Ship the player is currently targeting.
+		 * Number of credits the player has.
 		 */
-		public var shipTarget:Ship;
+		public var money:int = 10000;
 		
 		/**
-		 * Selection outline for the current ship target.
+		 * Ship the player is currently targeting.
 		 */
-		public var shipSelection:Selection;
+		private var _shipTarget:Ship;
+		
+		public function get shipTarget():Ship {
+			return _shipTarget;
+		}
+		
+		public function set shipTarget(ship:Ship):void {
+			if (_shipTarget != null) {
+				_shipTarget.loseFocus();
+			}
+			_shipTarget = ship;
+			if (_shipTarget != null) {
+				_shipTarget.getFocus();
+			}
+		}
 		
 		/**
 		 * Planet the player is currently targeting.
 		 */
 		private var _planetTarget:Planet;
 		
+		/**
+		 * Planet the player is currently targeting.
+		 */
 		public function get planetTarget():Planet { return _planetTarget }
+		
+		/**
+		 * Change which planet the player is currently targeting. Calls loseFocus on the old planet (if any) and getFocus on the
+		 * new planet (if any).
+		 */
 		public function set planetTarget(planet:Planet):void {
 			if (_planetTarget != null) {
 				_planetTarget.loseFocus();
@@ -46,11 +68,6 @@ package gameObjects
 			}
 			
 		}
-		
-		/**
-		 * Selection outline for the current planet target.
-		 */
-		public var planetSelection:Selection;
 		
 		/**
 		 * Constructor function.
@@ -122,7 +139,6 @@ package gameObjects
 						}
 					}
 					if (closest != null) {
-						forgetTargetPlanet();
 						planetTarget = closest;
 					}
 				}
@@ -141,16 +157,6 @@ package gameObjects
 			} else {
 				ship.turnLeft();
 			}
-		}
-		
-		
-		public function forgetTargetPlanet():void {
-			if (planetTarget != null) {
-				planetTarget.loseFocus();
-				planetTarget = null;
-			}
-			
-			Main.spaceScreen.selectorLayor.remove(planetSelection, true);
 		}
 		
 		/**

@@ -30,6 +30,11 @@ package {
 		public var max:Number;
 		
 		/**
+		 * The variable to watch as the max for the bar. May be used or ignored.
+		 */
+		public var maxVar:String;
+		
+		/**
 		 * How wide the bar is.
 		 */
 		public var width:Number;
@@ -114,7 +119,7 @@ package {
 			add(bar);
 			bar.origin.x = 0;
 			
-			
+			maxVar = "";
 			
 		}
 		
@@ -134,6 +139,7 @@ package {
 			}
 			max = _max;
 			min = _min;
+			maxVar = "";
 		}
 		
 		/**
@@ -157,6 +163,9 @@ package {
 			bar.y = background.y = y;
 			if (parent != null) {
 				try {
+					if (maxVar.length > 1) {
+						max = parent[maxVar];
+					}
 					value = parent[variable];
 					if (value >= max) {
 						bar.scale.x = 1;

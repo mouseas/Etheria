@@ -2,7 +2,6 @@ package gameObjects
 {
 	
 	import org.flixel.*
-	import org.flixel.plugin.photonstorm.FlxBar;
 	
 	
 	/**
@@ -219,8 +218,10 @@ package gameObjects
 		 */
 		public var mods:FlxGroup;
 		
-		//public var pointer:FlxSprite; // temp variable to indicate heading.
-		//public var pointer2:FlxSprite;
+		/**
+		 * Selection bracket around a target ship.
+		 */
+		public var selection:Selection;
 		
 		/**
 		 * Constructor function.
@@ -416,12 +417,18 @@ package gameObjects
 		 * Standard update cycle.
 		 */
 		override public function update():void {
+			if (playerControlled) {
+				
+			} else {
+				clickCheck();
+			}
 			if (FlxG.keys.N) {
 				shieldCur -= FlxG.elapsed * 15;
 				if (shieldCur < 0) {
 					shieldCur = 0;
 				}
 			}
+			checkCaps();
 			calculateMass();
 			rechargeShields();
 			rechargeEnergy();
@@ -443,6 +450,24 @@ package gameObjects
 				velocity.y = Math.sin(velAngle) * maxSpeed;
 			}
 			
+		}
+		
+		private function checkCaps():void {
+			if (shieldCur > shieldCap) {
+				shieldCur = shieldCap;
+			}
+			if (armorCur > armorCap) {
+				armorCur = armorCap;
+			}
+			if (structCur > structCap) {
+				structCur = structCap;
+			}
+			if (energyCur > energyCap) {
+				energyCur = energyCap;
+			}
+			if (fuelCur > fuelCap) {
+				fuelCur = fuelCap;
+			}
 		}
 		
 		private function rechargeShields():void {
@@ -565,6 +590,40 @@ package gameObjects
 					facingAngle += 2 * Math.PI;
 				}
 			}
+		}
+		
+		/**
+		 * Function for handling when the player clicks on a planet.
+		 */
+		public function clickCheck():void {
+			if(FlxG.mouse.visible) {
+				var _point:FlxPoint = new FlxPoint();
+				FlxG.mouse.getWorldPosition(Main.spaceScreen.viewPortCam,_point);
+				if(overlapsPoint(_point, false, Main.spaceScreen.viewPortCam)) {
+					
+					// Mouse is over Planet.
+					
+					if (FlxG.mouse.justPressed()) {
+						// Ship clicked.
+						Main.player.shipTarget = this;
+					}
+					
+				}
+				
+			}
+		}
+		
+		/**
+		 * Called when the player stops targeting this planet (resets some flags). This should also happen when
+		 * the player leaves the system.
+		 */
+		public function loseFocus():void {
+			Main.spaceScreen.selectorLayor.remove(selection, true);
+		}
+		
+		public function getFocus():void {
+			selection = new Selection(this);
+			Main.spaceScreen.selectorLayor.add(selection);
 		}
 		
 		/**

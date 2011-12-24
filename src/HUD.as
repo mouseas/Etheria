@@ -24,6 +24,8 @@ import org.flixel.plugin.photonstorm.FlxBar;
 		
 		public var energyBar:DispBar;
 		
+		public var cash:FlxText;
+		
 		public var bgElement:FlxSprite;
 		
 		
@@ -32,23 +34,33 @@ import org.flixel.plugin.photonstorm.FlxBar;
 			hudBackground.scrollFactor.x = hudBackground.scrollFactor.y = 0;
 			
 			shieldBar = new DispBar(FlxG.width - 110, 130, Main.player.ship, "shieldCur", 0, Main.player.ship.shieldCap, 100, 10);
-			shieldBar.scrollFactor.x = shieldBar.scrollFactor.y = 0;
+			shieldBar.scrollFactor = Main.NO_SCROLL
+			shieldBar.maxVar = "shieldCap";
 			
 			armorBar = new DispBar(FlxG.width - 110 , 150, Main.player.ship, "armorCur", 0, Main.player.ship.armorCap, 100, 10, 0xff444444, 0xff888888);
-			armorBar.scrollFactor.x = armorBar.scrollFactor.y = 0;
+			armorBar.scrollFactor = Main.NO_SCROLL
+			armorBar.maxVar = "armorCap";
 			
 			strucBar = new DispBar(FlxG.width - 110 , 170, Main.player.ship, "structCur", 0, Main.player.ship.structCap, 100, 10, 0xff550000, 0xff8888ff);
-			strucBar.scrollFactor.x = strucBar.scrollFactor.y = 0;
+			strucBar.scrollFactor = Main.NO_SCROLL
+			strucBar.maxVar = "structCap";
+			
 			
 			fuelBar = new DispBar(FlxG.width - 110 , 190, Main.player.ship, "fuelCur", 0, Main.player.ship.fuelCap, 100, 10, 0xff441144, 0xffff44ff);
-			fuelBar.scrollFactor.x = fuelBar.scrollFactor.y = 0;
+			fuelBar.scrollFactor = Main.NO_SCROLL
+			fuelBar.maxVar = "fuelCap";
 			
 			energyBar = new DispBar(FlxG.width - 110 , 210, Main.player.ship, "energyCur", 0, Main.player.ship.energyCap, 100, 10, 0xff444400, 0xffffff00);
-			energyBar.scrollFactor.x = energyBar.scrollFactor.y = 0;
+			energyBar.scrollFactor = Main.NO_SCROLL
+			energyBar.maxVar = "energyCap";
+			
+			cash = new FlxText(FlxG.width - 110, 500, 100, "0");
+			cash.scrollFactor = Main.NO_SCROLL;
+			cash.alignment = "right";
 			
 			bgElement = new FlxSprite(FlxG.width - 120 , 250); // currently used to mark off the ship target area.
 			bgElement.makeGraphic(110, 110, 0xff222222);
-			bgElement.scrollFactor.x = bgElement.scrollFactor.y = 0;
+			bgElement.scrollFactor = Main.NO_SCROLL
 			
 		}
 		
@@ -60,10 +72,14 @@ import org.flixel.plugin.photonstorm.FlxBar;
 			add(strucBar);
 			add(fuelBar);
 			add(energyBar);
+			add(cash);
 			
 		}
 		
-		
+		override public function update():void {
+			super.update();
+			cash.text = Main.player.money + "";
+		}
 		
 	}
 }

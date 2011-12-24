@@ -208,11 +208,11 @@ package
 			playingField.add(asteroidLayer);
 			playingField.add(shipsLayer);
 			playingField.add(projectileLayer);
+			playingField.add(selectorLayor);
+			playingField.add(radarLayer);
 			add(messageLayer);
-			add(radarLayer);
 			add(dialogLayer);
 			add(mapLayer);
-			add(selectorLayor);
 			
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
@@ -357,7 +357,7 @@ package
 			minimapCam.scroll = scroll;
 			scroll = null;
 			
-			player.forgetTargetPlanet();
+			player.planetTarget = null;
 			player.shipTarget = null;
 			
 			Star.resetStars();
