@@ -35,24 +35,19 @@ import org.flixel.plugin.photonstorm.FlxBar;
 			
 			shieldBar = new DispBar(FlxG.width - 110, 130, Main.player.ship, "shieldCur", 0, Main.player.ship.shieldCap, 100, 10);
 			shieldBar.scrollFactor = Main.NO_SCROLL
-			shieldBar.maxVar = "shieldCap";
 			
 			armorBar = new DispBar(FlxG.width - 110 , 150, Main.player.ship, "armorCur", 0, Main.player.ship.armorCap, 100, 10, 0xff444444, 0xff888888);
 			armorBar.scrollFactor = Main.NO_SCROLL
-			armorBar.maxVar = "armorCap";
 			
 			strucBar = new DispBar(FlxG.width - 110 , 170, Main.player.ship, "structCur", 0, Main.player.ship.structCap, 100, 10, 0xff550000, 0xff8888ff);
 			strucBar.scrollFactor = Main.NO_SCROLL
-			strucBar.maxVar = "structCap";
 			
 			
 			fuelBar = new DispBar(FlxG.width - 110 , 190, Main.player.ship, "fuelCur", 0, Main.player.ship.fuelCap, 100, 10, 0xff441144, 0xffff44ff);
 			fuelBar.scrollFactor = Main.NO_SCROLL
-			fuelBar.maxVar = "fuelCap";
 			
 			energyBar = new DispBar(FlxG.width - 110 , 210, Main.player.ship, "energyCur", 0, Main.player.ship.energyCap, 100, 10, 0xff444400, 0xffffff00);
 			energyBar.scrollFactor = Main.NO_SCROLL
-			energyBar.maxVar = "energyCap";
 			
 			cash = new FlxText(FlxG.width - 110, 500, 100, "0");
 			cash.scrollFactor = Main.NO_SCROLL;

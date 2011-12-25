@@ -1,6 +1,7 @@
 package gameObjects
 {
 	
+	import flash.utils.ByteArray;
 	import org.flixel.*
 	
 	
@@ -16,6 +17,12 @@ package gameObjects
 		 * File containing all the data for existing ship types.
 		 */
 		[Embed(source = "../data/ships.txt", mimeType = "application/octet-stream")]public static var shipTypeDataFile:Class;
+		[Embed(source = "../data/ships.xml", mimeType = "application/octet-stream")]public static var shipTypeXMLFile:Class;
+		
+		/**
+		 * XML data for the ship types
+		 */
+		public static var data:XML;
 		
 		/**
 		 * Counter to keep track of where in the file to start parsing each ship.
@@ -257,7 +264,7 @@ package gameObjects
 			
 			mods = new FlxGroup();
 			
-			if (true) {// These are all default values in case a value is missing from the ships.txt data file.
+			if (true) {// These are all default values in case a value is missing from the ships.xml data file.
 				name = "Freighter";
 				longName = "Quickster light cargo freighter";
 				_shipSprite = shipSprite0001;
@@ -290,77 +297,45 @@ package gameObjects
 		 * @return     The resulting ship cloned from its prototype.
 		 */
 		public static function cloneShip(_ID:uint):Ship {
-			var result:Ship = new Ship(Main.spaceScreen, _ID);
-			var prototype:Ship = prototypes.members[_ID];
-			
-			//Make sure we're cloning a valid prototype first.
-			if (prototype == null) {
-				// If not, clone a shuttlecraft and send an error.
-				trace ("Invalid prototype ship id " + _ID + ". Copying ship ID 0.");
-				prototype = prototypes[0];
-				if (prototype == null) {
-					// If shuttlecraft didn't load either, then ship data probably was not loaded.
-					trace ("FATAL ERROR: Failed to load ships data.");
-				}
-			} 
-			
-			//Copy most values. Mods need to be cloned rather than pointed, and the prototype's graphic needs to be loaded.
-			result._shipSprite = prototype._shipSprite;
-			result.NUM_FRAMES = prototype.NUM_FRAMES;
-			result.loadGraphic(result._shipSprite, true);
-			result.name = prototype.name;
-			result.longName = prototype.longName;
-			result.rcs = prototype.rcs;
-			result.thrustPower = prototype.thrustPower;
-			result.maxSpeed = prototype.maxSpeed;
-			result.shieldCap = prototype.shieldCap;
-			result.shieldCur = prototype.shieldCur;
-			result.shieldRecharge = prototype.shieldRecharge;
-			result.armorCap = prototype.armorCap;
-			result.armorCur = prototype.armorCur;
-			result.structCap = prototype.structCap;
-			result.structCur = prototype.structCur;
-			result.fuelCap = prototype.fuelCap;
-			result.fuelCur = prototype.fuelCur;
-			result.fuelBurnRate = prototype.fuelBurnRate;
-			result.fuelEfficiency = prototype.fuelEfficiency;
-			result.energyCap = prototype.energyCap;
-			result.energyCur = prototype.energyCur;
-			result.cargoCap = prototype.cargoCap;
-			result.cargoCur = prototype.cargoCur;
-			result.totalMass = prototype.totalMass;
-			result.baseMass = prototype.baseMass;
-			result.cargoMass = prototype.cargoMass;
-			result.modMass = prototype.modMass;
-			result.modSpace = prototype.modSpace;
-			
-			for (var i:int = 0; i < prototype.mods.length; i++) {
-				trace(i);
-				//result.mods.add(prototype.mods.members[i].clone()); // Need to implement mods with a clone() method.
-			}
-			
-			// Copy values from prototype to result.
-			// Make sure to clone base outfits and to create a new cargo hold FlxGroup rather than copying.
-			
+			var result:Ship = loadShipFromXML(_ID);
 			return result;
 		}
 		
-		public static function generateShipPrototypes():void {
-			trace("Generating Ship Prototypes.");
-			var fileContent:String = new shipTypeDataFile();
-			shipDataStrings = fileContent.split('\n');
-			
-			if (prototypes != null) {
-				prototypes.destroy();
-				prototypes = null;
+		private static function loadShipFromXML(index:int):Ship {
+			if (data == null) {
+				var file:ByteArray = new shipTypeXMLFile;
+				var str:String = file.readUTFBytes(file.length);
+				data = new XML(str);
 			}
-			prototypes = new FlxGroup();
-			for (var i:uint = 0; i < Protoship.NUM_SHIP_TYPES; i++) {
-				prototypes.add(parseShipFromText(shipDataStrings,_i));
-			}
-			trace("Generating Ship Prototypes...Done. Total: " + prototypes.length);
+			var result:Ship = new Ship(Main.spaceScreen, index);
+			result._shipSprite = result[data.ship[index].spriteImage];
+			result.NUM_FRAMES = data.ship[index].NUM_FRAMES;
+			result.loadGraphic(result._shipSprite, true);
+			result.name = data.ship[index].name;
+			result.longName = data.ship[index].longName;
+			result.rcs = data.ship[index].rcs;
+			result.thrustPower = data.ship[index].thrustPower;
+			result.maxSpeed = data.ship[index].maxSpeed;
+			result.shieldCap = data.ship[index].shieldCap;
+			result.shieldCur = data.ship[index].shieldCap;
+			result.shieldRecharge = data.ship[index].shieldRecharge;
+			result.armorCap = data.ship[index].armorCap;
+			result.armorCur = data.ship[index].armorCap;
+			result.structCap = data.ship[index].structCap;
+			result.structCur = data.ship[index].structCap;
+			result.fuelCap = data.ship[index].fuelCap;
+			result.fuelCur = data.ship[index].fuelCap;
+			result.fuelBurnRate = data.ship[index].fuelBurnRate;
+			result.fuelEfficiency = data.ship[index].fuelEfficiency;
+			result.energyCap = data.ship[index].energyCap;
+			result.energyCur = data.ship[index].energyCap;
+			result.cargoCap = data.ship[index].cargoCap;
+			result.cargoCur = data.ship[index].cargoCap;
+			result.baseMass = data.ship[index].baseMass;
+			result.modSpace = data.ship[index].modSpace;
+			result.calculateMass();
+			return result;
 		}
-		
 		
 		[Embed(source = "../../lib/ship-0000.png")]private var shipSprite0000:Class;
 		[Embed(source = "../../lib/ship-0001.png")]private var shipSprite0001:Class;

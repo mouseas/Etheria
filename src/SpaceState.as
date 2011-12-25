@@ -189,7 +189,6 @@ package
 			// Prep the static parts of the universe.
 			
 			Main.initMissionFlags();
-			Ship.generateShipPrototypes();
 			Main.generateSystems();
 			Main.generatePlanets();
 			

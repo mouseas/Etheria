@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<ship>
+		<name>Shuttle</name>
+		<longName>Globocon Industries MK 4 Shuttlecraft</longName>
+		<spriteImage>shipSprite0000</spriteImage>
+		<NUM_FRAMES>36</NUM_FRAMES>
+		<baseMass>7.0</baseMass>
+		<cargoCap>10</cargoCap>
+		<modSpace>15</modSpace>
+		<shieldCap>100</shieldCap>
+		<shieldRecharge>3.5</shieldRecharge>
+		<armorCap>20</armorCap>
+		<structCap>18</structCap>
+		<fuelCap>350</fuelCap>
+		<fuelBurnRate>2.5</fuelBurnRate>
+		<fuelEfficiency>1</fuelEfficiency>
+		<energyCap>110</energyCap>
+		<maxSpeed>100</maxSpeed>
+		<rcs>1.9</rcs>
+		<thrustPower>100</thrustPower>
+	</ship>
+	<ship>
+		<name>Scoutship</name>
+		<longName>Masterton Exploratory Scoutship</longName>
+		<spriteImage>shipSprite0001</spriteImage>
+		<NUM_FRAMES>36</NUM_FRAMES>
+		<baseMass>8.0</baseMass>
+		<cargoCap>10</cargoCap>
+		<modSpace>15</modSpace>
+		<shieldCap>140</shieldCap>
+		<shieldRecharge>3.5</shieldRecharge>
+		<armorCap>50</armorCap>
+		<structCap>22</structCap>
+		<fuelCap>750</fuelCap>
+		<fuelBurnRate>4.5</fuelBurnRate>
+		<fuelEfficiency>1</fuelEfficiency>
+		<energyCap>160</energyCap>
+		<maxSpeed>130</maxSpeed>
+		<rcs>2.1</rcs>
+		<thrustPower>140</thrustPower>
+	</ship>
+	<ship>
+		<name>Freighter</name>
+		<longName>Quickster light cargo freighter</longName>
+		<spriteImage>shipSprite0001</spriteImage>
+		<NUM_FRAMES>36</NUM_FRAMES>
+		<baseMass>24.0</baseMass>
+		<cargoCap>45</cargoCap>
+		<modSpace>15</modSpace>
+		<shieldCap>170</shieldCap>
+		<shieldRecharge>3.5</shieldRecharge>
+		<armorCap>40</armorCap>
+		<structCap>95</structCap>
+		<fuelCap>950</fuelCap>
+		<fuelBurnRate>6.5</fuelBurnRate>
+		<fuelEfficiency>1</fuelEfficiency>
+		<energyCap>210</energyCap>
+		<maxSpeed>85</maxSpeed>
+		<rcs>1.3</rcs>
+		<thrustPower>140</thrustPower>
+	</ship>
+</data>
