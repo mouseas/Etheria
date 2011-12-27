@@ -88,12 +88,18 @@ package gameObjects {
 		/**
 		 * The space system the Planet resides in.
 		 */
-		public var system:SpaceSystem;
-		
-		/**
-		 * The id of the system to attach this planet to. Used when first assembling the universe.
-		 */
-		public var preSystem:int;
+		public function get system():SpaceSystem {
+			return _system;
+		}
+		public function set system(sys:SpaceSystem):void {
+			if (_system != null) {
+				_system.planetList.remove(this, true);
+			}
+			sys.addPlanet(this);
+			_system = sys;
+			trace(_system);
+		}
+		private var _system:SpaceSystem;
 		
 		/**
 		 * The planet's number of inhabitants. This grows over time, but gets diminished by various events.
@@ -104,7 +110,7 @@ package gameObjects {
 		
 		/**
 		 * Rate at which the population grows in 1 year's time. Earth's current rate is 1.092 % or 0.01092
-		 * High growth should be around 2%, and low growth should be around 0.75%. Negative numbers mean
+		 * High growth should be around 2% (0.02), and low growth should be around 0.75% (0.075). Negative numbers mean
 		 * more deaths than births - population decline.
 		 * Remember when calculating population change to scale it to the amount of time passed - this rate is one year!
 		 */
@@ -161,8 +167,10 @@ package gameObjects {
 				result.y = data.planet[i].y;
 				result.canLand = data.planet[i].canLand == "true";
 				result.inhabited = data.planet[i].inhabited == "true";
-				var sys:SpaceSystem = SpaceSystem.allSystems.members[data.planet[i].system];
-				sys.addPlanet(result);
+				if (data.planet[i].reason != undefined) { result.reason = data.planet[i].reason; }
+				result.population = data.planet[i].population;
+				result.popGrowthRate = data.planet[i].popGrowthRate;
+				result.system = SpaceSystem.allSystems.members[data.planet[i].system];
 				result.spriteImage = result[data.planet[i].spriteImage];
 				allPlanets.add(result);
 			}
@@ -189,7 +197,7 @@ package gameObjects {
 		 */
 		public function requestLanding():void {
 			if (canLand) {
-				if (initialLandingRequest) {
+				if (initialLandingRequest || !inhabited) {
 					if (MathE.distance(Main.player.ship.getCenter(), getCenter()) < this.width + Main.player.ship.width) {
 						if (Main.player.ship.velSpeed <= Main.player.ship.maxSpeed / 10) {
 							// Successful landing here!
@@ -228,6 +236,19 @@ package gameObjects {
 		
 		public function getFocus():void {
 			selection = new Selection(this);
+			if (inhabited) {
+				if (true) { // friendly
+					selection.color = 0xFFFFFF00;
+				} else { // enemy
+					selection.color = 0xFFFF0000;
+				}
+			} else { // uninhabited
+				if (canLand) {
+					selection.color = 0xFF0000FF;
+				} else { // cannot land
+					selection.color = 0xFFBBBBBB;
+				}
+			}
 			Main.spaceScreen.selectorLayor.add(selection);
 		}
 		

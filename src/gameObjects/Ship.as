@@ -23,28 +23,6 @@ package gameObjects
 		 */
 		public static var data:XML;
 		
-		/**
-		 * Counter to keep track of where in the file to start parsing each ship.
-		 */
-		public static var _i:int = 0;
-		
-		/**
-		 * Array that holds Strings read from the lines of ships.txt.
-		 */
-		public static var shipDataStrings:Array;
-		
-		/**
-		 * Originals of each type of ship.
-		 */
-		public static var prototypes:FlxGroup = new FlxGroup();
-		
-		/**
-		 * How many types of ship there are. When Main makes all the protoships, it runs a for loop this number of times
-		 * and calls out each ID case. If there is a blank slot, a shuttlecraft will be loaded and an error message
-		 * given to the console.
-		 */
-		public static const NUM_SHIP_TYPES:uint = 3;
-		
 		// ######################## Unit Variables ######################## //
 		
 		/**

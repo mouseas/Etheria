@@ -42,11 +42,6 @@ package {
 		public static var missionFlags:Array;
 		
 		/**
-		 * Holds the library of ships that can be generated.
-		 */
-		public static var protoships:FlxGroup;
-		
-		/**
 		 * Array holding the camera used by the radar.
 		 */
 		public static var radar:Array;
@@ -121,17 +116,5 @@ package {
 			}
 		}
 		
-		
-		// ###################### Embedded data files and corresponding arrays of Strings ##########################
-		
-		/**
-		 * File containing all the data for existing planets.
-		 */
-		[Embed(source = "data/planets.txt", mimeType = "application/octet-stream")]public static var planetDataFile:Class;
-		
-		/**
-		 * Array that holds Strings read from the lines of planets.txt
-		 */
-		public static var planetDataStrings:Array;
 	}
 }

@@ -6,6 +6,8 @@
 		<y>500</y>
 		<canLand>true</canLand>
 		<inhabited>true</inhabited>
+		<population>23985163000</population>
+		<popGrowthRate>0.01092</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet001</spriteImage>
 	</planet>
@@ -15,6 +17,8 @@
 		<y>0</y>
 		<canLand>true</canLand>
 		<inhabited>false</inhabited>
+		<population>23985163000</population>
+		<popGrowthRate>0.01092</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet000</spriteImage>
 	</planet>
@@ -23,7 +27,10 @@
 		<x>0</x>
 		<y>0</y>
 		<canLand>false</canLand>
+		<reason>The developer said you can't.</reason>
 		<inhabited>false</inhabited>
+		<population>0</population>
+		<popGrowthRate>0</popGrowthRate>
 		<system>1</system>
 		<spriteImage>planet002</spriteImage>
 	</planet>

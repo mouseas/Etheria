@@ -23,11 +23,6 @@ package gameObjects {
 		public static var data:XML;
 		
 		/**
-		 * Static int holding the position of string array parsing
-		 */
-		public static var _i:int = 0;
-		
-		/**
 		 * Number of systems to attempt to load from systems.txt
 		 */
 		public static const NUM_SYSTEMS:int = 2;
@@ -35,6 +30,13 @@ package gameObjects {
 		/**
 		 * The name of the system.
 		 */
+		public function get name():String {
+			return _name;
+		}
+		public function set name(str:String):void {
+			_name = str;
+			nameText.text = str;
+		}
 		private var _name:String;
 		
 		/**
@@ -102,11 +104,8 @@ package gameObjects {
 			planetList.add(p);
 			if (p.system != null && p.system != this) {
 				trace ("ERROR: " + p.system.name + " has a planet assigned to " + name);
-				//This shouldn't happen, but if the planet is already assigned to a system, this tidbit removes it from
-				//that system's planetList before adding it to this system. This prevents it being in two places at once.
-				p.system.planetList.remove(p, true); 
+				//This shouldn't happen, but if the planet is already assigned to a system, this tidbit warns you about the mistake.
 			}
-			p.system = this;
 		}
 		
 		/**
@@ -139,6 +138,7 @@ package gameObjects {
 				result.name = data.system[i].name;
 				result.x = data.system[i].x;
 				result.y = data.system[i].y;
+				if (data.system[i].description != undefined) { result.description = data.system[i].description; }
 				allSystems.add(result);
 			}
 			for (i = 0; i < data.system.length(); i++) {
@@ -149,14 +149,6 @@ package gameObjects {
 			}
 		}
 		
-		public function set name(str:String):void {
-			_name = str;
-			nameText.text = str;
-		}
-		
-		public function get name():String {
-			return _name;
-		}
 		
 		
 	}

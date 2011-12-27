@@ -98,7 +98,7 @@ package
 		}
 		
 		/**
-		 * Loads all the values that change rom game to game - takes the save game data and loads
+		 * Loads all the values that change from game to game - takes the save game data and loads
 		 * everything to make the primordial universe match the saved state.
 		 */
 		public function loadTheUniverse():void {

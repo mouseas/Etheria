@@ -150,9 +150,6 @@ package
 		// I'm worried that since the HUD just sits off-screen, this is going to cause some conflicts later on.
 		// Edit: Turns out with the other cameras, this just works fine.
 		
-		
-		[Embed(source = "data/test.txt", mimeType = "application/octet-stream")]private var textFile:Class;
-		
 		public function SpaceState() {
 			
 			Main.spaceScreen = this; // This needs to come first, since other methods may reference the spaceScreen.
@@ -288,9 +285,9 @@ package
 				if (!frozen) {
 					if (FlxG.keys.justPressed("Z")) {
 						if (currentSystem == SpaceSystem.allSystems.members[0]) {
-							loadSystem(SpaceSystem.allSystems.members[1]);
+							jumpSystems(currentSystem, SpaceSystem.allSystems.members[1]);
 						} else {
-							loadSystem(SpaceSystem.allSystems.members[0]);
+							jumpSystems(currentSystem, SpaceSystem.allSystems.members[0]);
 						}
 					}
 					if (FlxG.keys.justPressed("BACKSLASH")) {
@@ -393,6 +390,7 @@ package
 			//calculate the position to move the player.ship to, then move them there.
 			//calculate the velocity the player.ship needs to be moving at, and set
 			loadSystem(to);
+			if (to.description != null && to.description.length > 0) { SpaceMessage.push(new SpaceMessage(to.description)); }
 		}
 		
 		/**
