@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<system id="0">
+		<name>Sol</name>
+		<x>50</x>
+		<y>50</y>
+		<connection>1</connection>
+	</system>
+	<system id="1">
+		<name>Test</name>
+		<x>-50</x>
+		<y>10</y>
+		<connection>0</connection>
+	</system>
+</data>

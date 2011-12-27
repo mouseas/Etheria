@@ -2,6 +2,7 @@ package gameObjects {
 	
 	import org.flixel.*;
 	import UIScreens.*;
+	import flash.utils.ByteArray;
 	
 	/**
 	 * Planets, space stations, shipyards, and other stellar objects. Anything the player might try to land on should be
@@ -11,14 +12,16 @@ package gameObjects {
 	public class Planet extends FlxSprite {
 		
 		/**
-		 * Static counter to keep track of where the parsing of planets is at.
+		 * Holds all the Planets in existence. Globally available.
 		 */
-		public static var _i:int = 0;
+		public static var allPlanets:FlxGroup;
 		
 		/**
-		 * How many planets to attempt to load.
+		 * Core XML data for the planets to be generated from.
 		 */
-		public static const NUM_PLANETS:int = 2;
+		private static var data:XML;
+		
+		[Embed(source = "../data/planets.xml", mimeType = "application/octet-stream")]public static var planetXMLFile:Class;
 		
 		// ################# Flags ###################
 		
@@ -134,6 +137,39 @@ package gameObjects {
 			
 		}
 		
+		public static function generatePlanets():void {
+			trace("Generating Planets.");
+			if (allPlanets != null) {
+				trace ("Clearing existing planets from existence!");
+				allPlanets.destroy();
+			}
+			if (data == null) {
+				trace("Generating Planets...loading XML.");
+				var file:ByteArray = new planetXMLFile;
+				var str:String = file.readUTFBytes(file.length);
+				data = new XML(str);
+			}
+			allPlanets = new FlxGroup();
+			trace("Generating Planets...creating " + data.planet.length() + " planets.");
+			for (var i:int = 0; i < data.planet.length(); i++) {
+				var result:Planet = new Planet(i);
+				if (i != data.planet[i].@id) {
+					trace ("WARNING: Planet ID does not match position. i:" + i + "  @id:" + data.planet[i].@id);
+				}
+				result.name = data.planet[i].name
+				result.x = data.planet[i].x;
+				result.y = data.planet[i].y;
+				result.canLand = data.planet[i].canLand == "true";
+				result.inhabited = data.planet[i].inhabited == "true";
+				var sys:SpaceSystem = SpaceSystem.allSystems.members[data.planet[i].system];
+				sys.addPlanet(result);
+				result.spriteImage = result[data.planet[i].spriteImage];
+				allPlanets.add(result);
+			}
+			
+			trace("Generating Planets...done!");
+		}
+		
 		/**
 		 * Standard update cycle.
 		 */
@@ -220,49 +256,9 @@ package gameObjects {
 			}
 		}
 		
-		/**
-		 * Passing in the string array, this will create a Planet from the data starting at startLine.
-		 * @param	array The entire array of strings to pull strings from in order to parse them.
-		 * @param	startLine Which index in the array to start at.
-		 * @return The mostly-finished Planet. Any variables not defined in the planets.txt file for that entry will default
-		 * to the values for New Earth, ID 0.
-		 */
-		public static function parsePlanetFromText(array:Array, startLine:int):Planet {
-			var i:int = startLine;
-			if (startLine < array.length) {
-				//trace(startLine);
-				var _ID:uint = StringParser.readInt(array[i++]);
-				var result:Planet = new Planet(_ID);
-				var str:String = StringParser.readVarName(array[i]);
-				while (str.indexOf("ID") != 0 && i < array.length) {
-					if (StringParser.readVarName(array[i]).indexOf("spriteImage") > -1) {
-						var newImage:String = StringParser.readValue(array[i]);
-						//trace("Loading sprite for planet " + result.ID + " named " + newImage);
-						result.spriteImage = result[newImage];
-					} else if (StringParser.assignValueFromStrings(array[i], result)) {
-						
-					} else {
-						trace("Error at line " + i + ". Contents: " + array[i]);
-					}
-					i++;
-					if(i < array.length) {
-						str = StringParser.readVarName(array[i]);
-					}
-				}
-				_i = i;
-				//trace(result.ID + " " + result.name);
-				return result;
-			} else {
-				trace("Not enough lines left in the file. Index was " + _i);
-				return null;
-			}
-			
-			
-		}
-		
-		//[Embed(source = "../../lib/planet000.png")]public var planet000:Class;
+		[Embed(source = "../../lib/planet000.png")]public var planet000:Class;
 		[Embed(source = "../../lib/planet001.png")]public var planet001:Class;
-		//[Embed(source = "../../lib/planet002.png")]public var planet002:Class;
+		[Embed(source = "../../lib/planet002.png")]public var planet002:Class;
 		
 		/**
 		 * Sets and loads the sprite, and makes the radarCircle match the size of the new sprite.

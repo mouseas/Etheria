@@ -36,21 +36,6 @@ package {
 		public static var spaceScreen:SpaceState;
 		
 		/**
-		 * Holds all the systems in existence. Globally available.
-		 */
-		public static var allSystems:FlxGroup;
-		
-		/**
-		 * Holds the FlxText objects belonging to the systems used to label them.
-		 */
-		public static var allSystemNames:FlxGroup;
-		
-		/**
-		 * Holds all the Planets in existence. Globally available.
-		 */
-		public static var allPlanets:FlxGroup;
-		
-		/**
 		 * Array of booleans to keep track of mission string progress, technology advances, etc. Before loading
 		 * any flags, all cells in this array are set to false.
 		 */
@@ -89,69 +74,6 @@ package {
 		public function Main()
 		{
 			super(850, 640, SpaceState, 1);
-		}
-		
-		
-		/**
-		 * Loads the embedded file systems.txt and parses its values into SpaceSystems.
-		 */
-		public static function generateSystems():void {
-			trace("Generating Systems.");
-			var fileContent:String = new spaceSystemDataFile();
-			spaceSystemDataStrings = fileContent.split('\n');
-			fileContent = null;
-			
-			if (allSystems != null) {
-				allSystems.destroy();
-				allSystems = null;
-			}
-			if (allSystemNames != null) {
-				allSystemNames.destroy();
-				allSystemNames = null;
-			}
-			allSystems = new FlxGroup();
-			allSystemNames = new FlxGroup();
-			for (var i:uint = 0; i < SpaceSystem.NUM_SYSTEMS; i++) {
-				allSystems.add(SpaceSystem.parseSystemFromText(spaceSystemDataStrings, SpaceSystem._i));
-			}
-			trace("Generating Systems...Making Connections.");
-			
-			//Add code to make connections between systems.
-			
-			trace("Generating Systems...Done. Total: " + allSystems.length);
-		}
-		
-		/**
-		 * Loads the embedded file planets.txt and parses its values into Planets.
-		 */
-		public static function generatePlanets():void {
-			trace("Generating Planets.");
-			var fileContent:String = new planetDataFile();
-			planetDataStrings = fileContent.split('\n');
-			fileContent = null;
-			
-			if (allPlanets != null) {
-				allPlanets.destroy();
-				allPlanets = null;
-			}
-			allPlanets = new FlxGroup();
-			for (var i:uint = 0; i < Planet.NUM_PLANETS; i++) {
-				allPlanets.add(Planet.parsePlanetFromText(planetDataStrings,Planet._i));
-			}
-			trace("Generating Planets...Assigning to Systems.");
-			
-			for (var j:int = 0; j < allPlanets.length; j++) {
-				try {
-					var p:Planet = allPlanets.members[j];
-					p.system = allSystems.members[p.preSystem];
-					p.system.addPlanet(p);
-					//trace("Added " + p + " to System " + p.system.name);
-				} catch (e:Error) {
-					trace("ERROR in connecting planets to their systems: " + e.getStackTrace());
-				}
-			}
-			
-			trace("Generating Planets...Done. Total: " + allPlanets.length);
 		}
 		
 		/**
@@ -201,26 +123,6 @@ package {
 		
 		
 		// ###################### Embedded data files and corresponding arrays of Strings ##########################
-		
-		/**
-		 * File containing all the data for existing systems.
-		 */
-		[Embed(source = "data/systems.txt", mimeType = "application/octet-stream")]public static var spaceSystemDataFile:Class;
-		
-		/**
-		 * Array that holds Strings read from the lines of systems.txt
-		 */
-		public static var spaceSystemDataStrings:Array;
-		
-		/**
-		 * File containing all the data for the connections to make between systems.
-		 */
-		[Embed(source = "data/systems.txt", mimeType = "application/octet-stream")]public static var connectionSystemDataFile:Class;
-		
-		/**
-		 * Array that holds Strings read from the lines of connections.txt
-		 */
-		public static var connectionSystemDataStrings:Array;
 		
 		/**
 		 * File containing all the data for existing planets.

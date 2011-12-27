@@ -1,8 +1,26 @@
 package gameObjects {
 	
-	import org.flixel.*
+	import org.flixel.*;
+	import flash.utils.ByteArray;
 	
 	public class SpaceSystem extends FlxSprite {
+		
+		/**
+		 * Holds all the systems in existence. Globally available.
+		 */
+		public static var allSystems:FlxGroup;
+		
+		public static var allSystemNames:FlxGroup;
+		
+		/**
+		 * Data file containing the SpaceSystems' data
+		 */
+		[Embed(source = "../data/systems.xml", mimeType = "application/octet-stream")]public static var XMLFile:Class;
+		
+		/**
+		 * XML data for the SpaceSystems to be generated from.
+		 */
+		public static var data:XML;
 		
 		/**
 		 * Static int holding the position of string array parsing
@@ -66,7 +84,7 @@ package gameObjects {
 			
 			nameText = new FlxText(1, 1, 300, _name);
 			nameText.cameras = Main.map;
-			Main.allSystemNames.add(nameText);
+			allSystemNames.add(nameText);
 			
 		}
 		
@@ -100,40 +118,35 @@ package gameObjects {
 			s.connectionsList.add(this);
 		}
 		
-		/**
-		 * Passing in the string array, this will create a SpaceSystem from the data starting at startLine.
-		 * @param	array The entire array of strings to pull strings from in order to parse them.
-		 * @param	startLine Which index in the array to start at.
-		 * @return The mostly-finished Planet. Any variables not defined in the systems.txt file for that entry will default
-		 * to the values for Sol, ID 0.
-		 */
-		public static function parseSystemFromText(array:Array, startLine:int):SpaceSystem {
-			var i:int = startLine;
-			if (startLine < array.length) {
-				//trace(startLine);
-				var _ID:uint = StringParser.readInt(array[i++]);
-				var result:SpaceSystem = new SpaceSystem(_ID);
-				var str:String = StringParser.readVarName(array[i]);
-				while (str.indexOf("ID") != 0 && i < array.length) {
-					if (StringParser.assignValueFromStrings(array[i], result)) {
-						
-					} else {
-						trace("Error at line " + i + ". Contents: " + array[i]);
-					}
-					i++;
-					if(i < array.length) {
-						str = StringParser.readVarName(array[i]);
-					}
-				}
-				_i = i;
-				//trace(result.ID + " " + result.name);
-				return result;
-			} else {
-				trace("Not enough lines left in the file. Index was " + _i);
-				return null;
+		public static function generateSystems():void {
+			if (allSystems != null) {
+				trace ("Clearing existing systems from existence!");
+				allSystems.destroy();
 			}
-			
-			
+			allSystems = new FlxGroup();
+			if (allSystemNames != null) {
+				trace ("Clearing existing systems' names from existence!");
+				allSystemNames.destroy();
+			}
+			allSystemNames = new FlxGroup();
+			if (data == null) {
+				var file:ByteArray = new XMLFile;
+				var str:String = file.readUTFBytes(file.length);
+				data = new XML(str);
+			}
+			for (var i:int = 0; i < data.system.length(); i++) {
+				var result:SpaceSystem = new SpaceSystem(i);
+				result.name = data.system[i].name;
+				result.x = data.system[i].x;
+				result.y = data.system[i].y;
+				allSystems.add(result);
+			}
+			for (i = 0; i < data.system.length(); i++) {
+				var system:SpaceSystem = allSystems.members[i] as SpaceSystem;
+				for (var j:int = 0; j < data.system[i].connection.length(); j++) {
+					system.addConnection(allSystems.members[data.system[i].connection[j]]);
+				}
+			}
 		}
 		
 		public function set name(str:String):void {

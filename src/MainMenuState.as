@@ -106,8 +106,8 @@ package
 			
 			
 			// Put the player in the system they start in.
-			var sys:SpaceSystem = Main.allSystems.members[0];
-			var pla:Planet = Main.allPlanets.members[0];
+			var sys:SpaceSystem = SpaceSystem.allSystems.members[0];
+			var pla:Planet = Planet.allPlanets.members[0];
 			//something missing here...
 		}
 		
@@ -130,7 +130,7 @@ package
 				
 				loadTheUniverse();
 				
-				Main.spaceScreen.loadSystem(Main.getObjectByID(0, Main.allSystems) as SpaceSystem);
+				Main.spaceScreen.loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
 				Main.spaceScreen.dialogLayer.remove(this, true);
 				Main.spaceScreen.unfreeze();
 				this.destroy();

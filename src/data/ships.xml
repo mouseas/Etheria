@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data>
-	<ship>
+	<ship id="0">
 		<name>Shuttle</name>
 		<longName>Globocon Industries MK 4 Shuttlecraft</longName>
 		<spriteImage>shipSprite0000</spriteImage>
@@ -20,7 +20,7 @@
 		<rcs>1.9</rcs>
 		<thrustPower>100</thrustPower>
 	</ship>
-	<ship>
+	<ship id="0">
 		<name>Scoutship</name>
 		<longName>Masterton Exploratory Scoutship</longName>
 		<spriteImage>shipSprite0001</spriteImage>
@@ -40,7 +40,7 @@
 		<rcs>2.1</rcs>
 		<thrustPower>140</thrustPower>
 	</ship>
-	<ship>
+	<ship id="0">
 		<name>Freighter</name>
 		<longName>Quickster light cargo freighter</longName>
 		<spriteImage>shipSprite0001</spriteImage>

@@ -16,7 +16,6 @@ package gameObjects
 		/**
 		 * File containing all the data for existing ship types.
 		 */
-		[Embed(source = "../data/ships.txt", mimeType = "application/octet-stream")]public static var shipTypeDataFile:Class;
 		[Embed(source = "../data/ships.xml", mimeType = "application/octet-stream")]public static var shipTypeXMLFile:Class;
 		
 		/**
@@ -341,46 +340,6 @@ package gameObjects
 		[Embed(source = "../../lib/ship-0001.png")]private var shipSprite0001:Class;
 		
 		/**
-		 * Passing in the string array, this will create a Protoship from the data starting at startLine.
-		 * @param	array The entire array of strings to pull strings from in order to parse them.
-		 * @param	startLine Which index in the array to start at.
-		 * @return The finished Protoship. Any variables not defined in the ships.txt file for that entry will default
-		 * to the values for a freighter, ship type ID 2.
-		 */
-		public static function parseShipFromText(array:Array, startLine:int):Ship {
-			//var NUM_LINES_NEEDED:int = 18;
-			var i:int = startLine;
-			if (startLine < array.length) {
-				//trace(startLine);
-				var _ID:uint = StringParser.readInt(array[i++]);
-				var result:Ship = new Ship(Main.spaceScreen, _ID);
-				var str:String = StringParser.readVarName(array[i]);
-				while (str.indexOf("ID") != 0 && i < array.length) {
-					if (StringParser.readVarName(array[i]).indexOf("spriteImage") > -1) {
-						var newImage:String = StringParser.readValue(array[i]);
-						result._shipSprite = result[newImage];
-					} else if (StringParser.assignValueFromStrings(array[i], result)) {
-						
-					} else {
-						trace("Error at line " + i + ". Contents: " + array[i]);
-					}
-					i++;
-					if(i < array.length) {
-						str = StringParser.readVarName(array[i]);
-					}
-				}
-				_i = i;
-				//trace(result.ID + " " + result.name);
-				return result;
-			} else {
-				trace("Not enough lines left in the file. Index was " + _i);
-				return null;
-			}
-			
-			
-		}
-		
-		/**
 		 * Pre-update cycle. Currently re-positions the radarDot to match the ship's position, scaled for the radar.
 		 */
 		override public function preUpdate():void {
@@ -403,7 +362,7 @@ package gameObjects
 					shieldCur = 0;
 				}
 			}
-			checkCaps();
+			//checkCaps();
 			calculateMass();
 			rechargeShields();
 			rechargeEnergy();

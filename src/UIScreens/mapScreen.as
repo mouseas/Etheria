@@ -1,6 +1,7 @@
 package UIScreens {
 	
 	import org.flixel.*
+	import gameObjects.*;
 	
 	public class mapScreen extends UIScreen {
 		
@@ -13,15 +14,15 @@ package UIScreens {
 			OKButton.y = uiBackground.y + 460;
 			OKButton.label.text = "Close";
 			
-			add(Main.allSystems);
-			add(Main.allSystemNames);
+			add(SpaceSystem.allSystems);
+			add(SpaceSystem.allSystemNames);
 			
 			FlxG.addCamera(Main.spaceScreen.mapCam);
 		}
 		
 		override public function closeScreen():void {
-			remove(Main.allSystems, true);
-			remove(Main.allSystemNames, true);
+			remove(SpaceSystem.allSystems, true);
+			remove(SpaceSystem.allSystemNames, true);
 			FlxG.removeCamera(Main.spaceScreen.mapCam,false)
 			super.closeScreen();
 		}

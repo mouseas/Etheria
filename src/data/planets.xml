@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<planet id="0">
+		<name>New Earth</name>
+		<x>500</x>
+		<y>500</y>
+		<canLand>true</canLand>
+		<inhabited>true</inhabited>
+		<system>0</system>
+		<spriteImage>planet001</spriteImage>
+	</planet>
+	<planet id="1">
+		<name>Mars</name>
+		<x>-50</x>
+		<y>0</y>
+		<canLand>true</canLand>
+		<inhabited>false</inhabited>
+		<system>0</system>
+		<spriteImage>planet000</spriteImage>
+	</planet>
+	<planet id="2">
+		<name>Alpha Centauri</name>
+		<x>0</x>
+		<y>0</y>
+		<canLand>false</canLand>
+		<inhabited>false</inhabited>
+		<system>1</system>
+		<spriteImage>planet002</spriteImage>
+	</planet>
+</data>

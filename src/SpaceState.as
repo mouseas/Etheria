@@ -189,8 +189,9 @@ package
 			// Prep the static parts of the universe.
 			
 			Main.initMissionFlags();
-			Main.generateSystems();
-			Main.generatePlanets();
+			
+			SpaceSystem.generateSystems();
+			Planet.generatePlanets();
 			
 			
 		}
@@ -286,10 +287,10 @@ package
 				}
 				if (!frozen) {
 					if (FlxG.keys.justPressed("Z")) {
-						if (currentSystem == Main.allSystems.members[0]) {
-							loadSystem(Main.allSystems.members[1]);
+						if (currentSystem == SpaceSystem.allSystems.members[0]) {
+							loadSystem(SpaceSystem.allSystems.members[1]);
 						} else {
-							loadSystem(Main.allSystems.members[0]);
+							loadSystem(SpaceSystem.allSystems.members[0]);
 						}
 					}
 					if (FlxG.keys.justPressed("BACKSLASH")) {
