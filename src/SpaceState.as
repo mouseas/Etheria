@@ -284,8 +284,8 @@ package
 				}
 				if (!frozen) {
 					if (FlxG.keys.justPressed("Z")) {
-						if (currentSystem == SpaceSystem.allSystems.members[0]) {
-							jumpSystems(currentSystem, SpaceSystem.allSystems.members[1]);
+						if (currentSystem.ID < SpaceSystem.allSystems.length - 1) {
+							jumpSystems(currentSystem, SpaceSystem.allSystems.members[currentSystem.ID + 1]);
 						} else {
 							jumpSystems(currentSystem, SpaceSystem.allSystems.members[0]);
 						}
@@ -332,6 +332,8 @@ package
 			player.ship.addToScreen();
 			
 			currentSystem = s;
+			currentSystem.explored = true;
+			SpaceSystem.updateMap();
 			planetLayer.replace(planetList, currentSystem.planetList); // replaces it in the display position (draw order)
 			planetList = currentSystem.planetList; // replaces the object reference
 			
@@ -363,19 +365,19 @@ package
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
-			trace(newShip);
+			//trace(newShip);
 			
 			newShip = Ship.cloneShip(1);
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
-			trace(newShip);
+			//trace(newShip);
 			
 			newShip = Ship.cloneShip(2);
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
-			trace(newShip);
+			//trace(newShip);
 			
 			// generate and load any ships in the system.
 		}
@@ -391,6 +393,11 @@ package
 			//calculate the velocity the player.ship needs to be moving at, and set
 			loadSystem(to);
 			if (to.description != null && to.description.length > 0) { SpaceMessage.push(new SpaceMessage(to.description)); }
+			var str:String = "Warping into " + to.name + " on " + date + ".";
+			if (to.planetList.length < 1) {
+				str += " No stellar objects present.";
+			}
+			SpaceMessage.push(new SpaceMessage(str));
 		}
 		
 		/**

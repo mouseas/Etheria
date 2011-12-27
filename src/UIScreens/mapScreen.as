@@ -14,6 +14,7 @@ package UIScreens {
 			OKButton.y = uiBackground.y + 460;
 			OKButton.label.text = "Close";
 			
+			add(ConnectionLine.allConnectionLines);
 			add(SpaceSystem.allSystems);
 			add(SpaceSystem.allSystemNames);
 			
@@ -23,6 +24,7 @@ package UIScreens {
 		override public function closeScreen():void {
 			remove(SpaceSystem.allSystems, true);
 			remove(SpaceSystem.allSystemNames, true);
+			remove(ConnectionLine.allConnectionLines, true);
 			FlxG.removeCamera(Main.spaceScreen.mapCam,false)
 			super.closeScreen();
 		}

@@ -12,10 +12,16 @@ package gameObjects {
 		
 		public static var allSystemNames:FlxGroup;
 		
+		
 		/**
 		 * Data file containing the SpaceSystems' data
 		 */
 		[Embed(source = "../data/systems.xml", mimeType = "application/octet-stream")]public static var XMLFile:Class;
+		
+		/**
+		 * Little circle image used on the map to represent a system, ie the graphic for the FlxSprite.
+		 */
+		[Embed(source = "../../lib/system-map-circle.png")]public var radarImage:Class;
 		
 		/**
 		 * XML data for the SpaceSystems to be generated from.
@@ -55,17 +61,16 @@ package gameObjects {
 		public var connectionsList:FlxGroup;
 		
 		/**
-		 * The ships that exist in this system. Might be stupid to do it this way. I'll prolly change this later.
-		 */
-		public var shipsList:FlxGroup;
-		
-		/**
 		 * System description displayed upon warping into the system. Example: "This system is
 		 * owned by the Fedora Empire. Please obey the laws."
 		 */
 		public var description:String;
 		
-		[Embed(source = "../../lib/system-map-circle.png")]public var image:Class;
+		/**
+		 * Whether the player has explored this system and added it to their map.
+		 * SAVED
+		 */
+		public var explored:Boolean;
 		
 		/**
 		 * Constructor - initializes all the groups but does not assign anything to them. 
@@ -73,20 +78,23 @@ package gameObjects {
 		public function SpaceSystem(_id:int) {
 			// note these aren't added to the group - if they were added, they would show up on the screen when the systems
 			// are displayed. Which would really screw up the map. Bigtime.
-			super(0, 0, image);
+			super(0, 0, radarImage);
 			
 			color = 0x00ff00;
 			cameras = Main.map;
 			
 			planetList = new FlxGroup();
 			connectionsList = new FlxGroup();
-			shipsList = new FlxGroup();
 			ID = _id;
 			_name = "Sol";
 			
 			nameText = new FlxText(1, 1, 300, _name);
+			nameText.visible = false;
 			nameText.cameras = Main.map;
 			allSystemNames.add(nameText);
+			
+			explored = false;
+			visible = false;
 			
 		}
 		
@@ -113,11 +121,20 @@ package gameObjects {
 		 * @param	s The system to connect this system to.
 		 */
 		public function addConnection(s:SpaceSystem):void {
+			if (connectionsList.members.indexOf(s) < 0 && s.connectionsList.members.indexOf(this) < 0) {
+				ConnectionLine.allConnectionLines.add(new ConnectionLine(s, this));
+				//trace("Adding line between " + s.name + " and " + name);
+			}
 			connectionsList.add(s);
 			s.connectionsList.add(this);
 		}
 		
+		/**
+		 * Generate all the systems from an XML data file. Called when the game is first started.
+		 */
 		public static function generateSystems():void {
+			// Make new FlxGroups (and delete any existing ones
+			trace("Generating Systems.");
 			if (allSystems != null) {
 				trace ("Clearing existing systems from existence!");
 				allSystems.destroy();
@@ -128,11 +145,18 @@ package gameObjects {
 				allSystemNames.destroy();
 			}
 			allSystemNames = new FlxGroup();
+			ConnectionLine.prepAllConnectionLines()
+			
+			// Load the XML data from the embedded file
+			trace("Generating Systems...Load XML data");
 			if (data == null) {
 				var file:ByteArray = new XMLFile;
 				var str:String = file.readUTFBytes(file.length);
 				data = new XML(str);
 			}
+			
+			// Generate the systems from the XML data
+			trace("Generating Systems...create systems from XML data");
 			for (var i:int = 0; i < data.system.length(); i++) {
 				var result:SpaceSystem = new SpaceSystem(i);
 				result.name = data.system[i].name;
@@ -141,15 +165,44 @@ package gameObjects {
 				if (data.system[i].description != undefined) { result.description = data.system[i].description; }
 				allSystems.add(result);
 			}
+			
+			// Connect all the systems now that they've been generated
+			trace("Generating Systems...making connections");
 			for (i = 0; i < data.system.length(); i++) {
 				var system:SpaceSystem = allSystems.members[i] as SpaceSystem;
 				for (var j:int = 0; j < data.system[i].connection.length(); j++) {
 					system.addConnection(allSystems.members[data.system[i].connection[j]]);
 				}
 			}
+			
+			trace("Generating Systems...done!");
 		}
 		
+		/**
+		 * Function which goes through all the systems and connection lines to update their visibility. Called whenever a system is
+		 * loaded, and after buying a map.
+		 */
+		public static function updateMap():void {
+			for (var i:int = 0; i < allSystems.length; i++) {
+				var sys:SpaceSystem = allSystems.members[i];
+				if (sys.explored) {
+					sys.visible = true;
+					sys.nameText.visible = true;
+					for (var j:int = 0; j < sys.connectionsList.length; j++) {
+						var connectedSys:SpaceSystem = sys.connectionsList.members[j];
+						if (!connectedSys.explored) {
+							connectedSys.visible = true;
+							connectedSys.nameText.visible = false;
+						}
+					}
+				}
+			}
+			ConnectionLine.updateMap();
+		}
 		
+		override public function toString():String {
+			return "SpaceSystem - " + name + ", ID:" + ID + " Planets:" + planetList.length;
+		}
 		
 	}
 	

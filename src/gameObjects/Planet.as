@@ -97,7 +97,7 @@ package gameObjects {
 			}
 			sys.addPlanet(this);
 			_system = sys;
-			trace(_system);
+			//trace(_system);
 		}
 		private var _system:SpaceSystem;
 		

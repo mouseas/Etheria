@@ -2,15 +2,36 @@
 <data>
 	<system id="0">
 		<name>Sol</name>
-		<x>50</x>
-		<y>50</y>
+		<x>0</x>
+		<y>0</y>
 		<connection>1</connection>
+		<connection>2</connection>
 	</system>
 	<system id="1">
-		<name>Test</name>
-		<x>-50</x>
-		<y>10</y>
+		<name>Alpha Centauri</name>
+		<x>-25</x>
+		<y>-10</y>
 		<connection>0</connection>
+		<connection>4</connection>
 		<description>This system is owned by the Fedora Empire. Please obey the laws.</description>
+	</system>
+	<system id="2">
+		<name>Test2</name>
+		<x>15</x>
+		<y>25</y>
+		<connection>0</connection>
+		<connection>3</connection>
+	</system>
+	<system id="3">
+		<name>Test3</name>
+		<x>-20</x>
+		<y>60</y>
+		<connection>2</connection>
+	</system>
+	<system id="4">
+		<name>Test4</name>
+		<x>-60</x>
+		<y>28</y>
+		<connection>1</connection>
 	</system>
 </data>

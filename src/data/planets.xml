@@ -17,13 +17,13 @@
 		<y>0</y>
 		<canLand>true</canLand>
 		<inhabited>false</inhabited>
-		<population>23985163000</population>
-		<popGrowthRate>0.01092</popGrowthRate>
+		<population>0</population>
+		<popGrowthRate>0</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet000</spriteImage>
 	</planet>
 	<planet id="2">
-		<name>Alpha Centauri</name>
+		<name>Centauri Prime</name>
 		<x>0</x>
 		<y>0</y>
 		<canLand>false</canLand>
@@ -33,5 +33,16 @@
 		<popGrowthRate>0</popGrowthRate>
 		<system>1</system>
 		<spriteImage>planet002</spriteImage>
+	</planet>
+	<planet id="3">
+		<name>Test3</name>
+		<x>-50</x>
+		<y>0</y>
+		<canLand>true</canLand>
+		<inhabited>true</inhabited>
+		<population>23985163000</population>
+		<popGrowthRate>0.01092</popGrowthRate>
+		<system>3</system>
+		<spriteImage>planet000</spriteImage>
 	</planet>
 </data>
