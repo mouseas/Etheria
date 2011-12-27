@@ -61,6 +61,11 @@ package gameObjects {
 		public var connectionsList:FlxGroup;
 		
 		/**
+		 * Selection bracket around this SpaceSystem.
+		 */
+		public var selection:Selection;
+		
+		/**
 		 * System description displayed upon warping into the system. Example: "This system is
 		 * owned by the Fedora Empire. Please obey the laws."
 		 */
@@ -102,6 +107,9 @@ package gameObjects {
 			super.update();
 			nameText.x = x + width + 5;
 			nameText.y = y - 3;
+			//if (Main.spaceScreen.mapOn) {
+				clickCheck();
+			//}
 		}
 		
 		/**
@@ -200,6 +208,54 @@ package gameObjects {
 			ConnectionLine.updateMap();
 		}
 		
+		/**
+		 * Call when system is selected, either in map or when jumping or when selecting hyper target by keyboard.
+		 */
+		public function getFocus():void {
+			if (selection != null) {
+				Main.spaceScreen.topLayer.remove(selection, true);
+				selection.destroy();
+			}
+			selection = new Selection(this);
+			selection.setCameras(Main.map);
+			
+			Main.spaceScreen.topLayer.add(selection);
+		}
+		
+		/**
+		 * Call when system is de-selected, ie another system is selected.
+		 */
+		public function loseFocus():void {
+			Main.spaceScreen.topLayer.remove(selection, true);
+			selection.destroy();
+		}
+		
+		/**
+		 * Function for handling when the player clicks on a planet.
+		 */
+		public function clickCheck():void {
+			if(FlxG.mouse.visible && visible) {
+				var _point:FlxPoint = new FlxPoint();
+				FlxG.mouse.getWorldPosition(Main.spaceScreen.mapCam,_point);
+				if(overlapsPoint(_point, false, Main.spaceScreen.mapCam)) {
+					
+					// Mouse is over System.
+					
+					if (FlxG.mouse.justPressed()) {
+						//trace("Clicked on " + name);
+						// System clicked.
+						Main.player.systemTarget = this;
+					}
+					
+				}
+				
+			}
+		}
+		
+		/**
+		 * Produces a useful string for debugging to easily identify a SpaceSystem object.
+		 * @return SpaceSystem, name, id, and how many planets in the system.
+		 */
 		override public function toString():String {
 			return "SpaceSystem - " + name + ", ID:" + ID + " Planets:" + planetList.length;
 		}

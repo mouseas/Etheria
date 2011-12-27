@@ -69,6 +69,16 @@ package gameObjects
 			
 		}
 		
+		public function get systemTarget():SpaceSystem {
+			return _systemTarget;
+		}
+		public function set systemTarget(sys:SpaceSystem):void {
+			if (_systemTarget != null) { _systemTarget.loseFocus() };
+			_systemTarget = sys;
+			if (_systemTarget != null) { _systemTarget.getFocus() };
+		}
+		private var _systemTarget:SpaceSystem;
+		
 		/**
 		 * Constructor function.
 		 * @param _screen The screen to put the player's ship on when flying about.

@@ -41,6 +41,10 @@ package gameObjects {
 			
 		}
 		
+		public function setCameras(cams:Array):void {
+			topLeft.cameras = topRight.cameras = bottomLeft.cameras = bottomRight.cameras = cams;
+		}
+		
 		private function makeCorner(frame:uint):FlxSprite {
 			var result:FlxSprite = new FlxSprite(0, 0);
 			result.loadGraphic(selectionCorner, true);

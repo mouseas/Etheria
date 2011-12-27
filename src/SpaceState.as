@@ -76,6 +76,11 @@ package
 		 */
 		public var selectorLayor:FlxGroup;
 		
+		/**
+		 * Top-most layer, which will eventually be removed. Used in troubleshooting.
+		 */
+		public var topLayer:FlxGroup;
+		
 		// #############################    ################################## //
 		
 		/**
@@ -167,6 +172,7 @@ package
 			dialogLayer = new FlxGroup();
 			mapLayer = new FlxGroup();
 			selectorLayor = new FlxGroup();
+			topLayer = new FlxGroup();
 			
 			// Set up the cameras.
 			
@@ -210,6 +216,7 @@ package
 			add(messageLayer);
 			add(dialogLayer);
 			add(mapLayer);
+			add(topLayer);
 			
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
