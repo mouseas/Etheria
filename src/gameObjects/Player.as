@@ -99,7 +99,7 @@ package gameObjects
 		 */
 		override public function update():void {
 			
-			if (!screen.frozen) {
+			if (!screen.frozen && !ship.inHyperspace) {
 				ship.acceleration.x = ship.acceleration.y = 0; // set to 0, then adjust if accelerating.
 				flyingKeys();
 			}
@@ -119,12 +119,12 @@ package gameObjects
 			} else if (FlxG.keys.RIGHT) {
 				ship.turnRight();
 			} else if (FlxG.keys.DOWN) { // Turn to face opposite move direction
-				turnTowardTarget(ship.velAngle + Math.PI);
+				ship.turnTowardTarget(ship.velAngle + Math.PI);
 			} else if (FlxG.keys.A) { //Autopilot
 				if (shipTarget != null) {
-					turnTowardTarget(MathE.angleBetweenPoints(ship.getCenter(), shipTarget.getCenter()));
+					ship.turnTowardTarget(MathE.angleBetweenPoints(ship.getCenter(), shipTarget.getCenter()));
 				} else if (planetTarget != null) {
-					turnTowardTarget(MathE.angleBetweenPoints(ship.getCenter(), planetTarget.getCenter()));
+					ship.turnTowardTarget(MathE.angleBetweenPoints(ship.getCenter(), planetTarget.getCenter()));
 				}
 				
 			}
@@ -155,17 +155,6 @@ package gameObjects
 				if (planetTarget != null) {
 					planetTarget.requestLanding();
 				}
-			}
-		}
-		
-		private function turnTowardTarget(goalAngle:Number):void {
-			var turn:Number = MathE.turnDifference(ship.facingAngle, goalAngle);
-			if (Math.abs(turn) < ship.rcs * FlxG.elapsed) {
-				//ship.facingAngle = goalAngle; // if the amount to turn is less than the ship can turn this frame, just match the goalAngle.
-			} else if (turn > 0) {
-				ship.turnRight();
-			} else {
-				ship.turnLeft();
 			}
 		}
 		

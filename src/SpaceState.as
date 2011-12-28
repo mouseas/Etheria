@@ -291,10 +291,10 @@ package
 				}
 				if (!frozen) {
 					if (FlxG.keys.justPressed("Z")) {
-						if (currentSystem.ID < SpaceSystem.allSystems.length - 1) {
-							jumpSystems(currentSystem, SpaceSystem.allSystems.members[currentSystem.ID + 1]);
-						} else {
-							jumpSystems(currentSystem, SpaceSystem.allSystems.members[0]);
+						if (player.systemTarget != null && player.systemTarget != currentSystem && 
+						currentSystem.connectionsList.members.indexOf(player.systemTarget) > -1) {
+							player.ship.hyperTarget = player.systemTarget;
+							player.ship.inHyperspace = true;
 						}
 					}
 					if (FlxG.keys.justPressed("BACKSLASH")) {
@@ -396,8 +396,13 @@ package
 		 * is loaded into the scene.
 		 */
 		public function jumpSystems(from:SpaceSystem, to:SpaceSystem):void {
-			//calculate the position to move the player.ship to, then move them there.
-			//calculate the velocity the player.ship needs to be moving at, and set
+			var enteringAngle:Number = MathE.angleBetweenPoints(to.getCenter(), from.getCenter());
+			var p:FlxPoint = MathE.pointFromAngle(new FlxPoint(0, 0), enteringAngle, STD_JUMP_DISTANCE);
+			player.ship.x = p.x;
+			player.ship.y = p.y;
+			player.ship.facingAngle = enteringAngle + Math.PI;
+			Main.viewport[0].update();
+			
 			loadSystem(to);
 			if (to.description != null && to.description.length > 0) { SpaceMessage.push(new SpaceMessage(to.description)); }
 			var str:String = "Warping into " + to.name + " on " + date + ".";

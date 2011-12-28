@@ -24,6 +24,19 @@ package
 		}
 		
 		/**
+		 * Calculates a point out from a center/source point, at a given angle and distance.
+		 * @param	center Source / Center point from which the resulting point is spaced
+		 * @param	angle Angle at which the resulting point will be from center
+		 * @param	distance How far (in pixels) from the center the resulting point will be
+		 */
+		public static function pointFromAngle(center:FlxPoint, angle:Number, distance:Number = 1):FlxPoint {
+			var result:FlxPoint = new FlxPoint();
+			result.x = center.x + (distance * Math.cos(angle));
+			result.y = center.y + (distance * Math.sin(angle));
+			return result;
+		}
+		
+		/**
 		 * Calculates the strait-line distance between two points
 		 * @param	one Point A
 		 * @param	two Point B

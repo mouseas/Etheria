@@ -208,6 +208,16 @@ package gameObjects
 		public var selection:Selection;
 		
 		/**
+		 * Is the ship warping out into another system?
+		 */
+		public var inHyperspace:Boolean;
+		
+		/**
+		 * Which system the ship is currently targeting for hyperspace.
+		 */
+		public var hyperTarget:SpaceSystem;
+		
+		/**
 		 * Constructor function.
 		 * @param _parent The screen this ship is on.
 		 * @param typeID What protoship ID to load when creating this ship.
@@ -323,6 +333,12 @@ package gameObjects
 		override public function preUpdate():void {
 			radarDot.x = x / Main.RADAR_ZOOM;
 			radarDot.y = y / Main.RADAR_ZOOM;
+			while (facingAngle > 2 * Math.PI) {
+				facingAngle -= 2 * Math.PI;
+			}
+			while (facingAngle < 0) {
+				facingAngle += 2 * Math.PI;
+			}
 		}
 		
 		/**
@@ -332,9 +348,11 @@ package gameObjects
 			if (playerControlled) {
 				
 			} else {
+				// Call ai stuff here, too.
 				clickCheck();
 			}
-			if (FlxG.keys.N) {
+			
+			if (FlxG.keys.N) { // Debug keystroke.
 				shieldCur -= FlxG.elapsed * 15;
 				if (shieldCur < 0) {
 					shieldCur = 0;
@@ -344,6 +362,10 @@ package gameObjects
 			calculateMass();
 			rechargeShields();
 			rechargeEnergy();
+			
+			if (inHyperspace) {
+				hyperSpace();
+			}
 			
 			frame = int((facingAngle / (Math.PI * 2)) * NUM_FRAMES);
 			super.update();
@@ -356,12 +378,45 @@ package gameObjects
 			}
 			
 			
-			if (Math.abs(velSpeed) > maxSpeed) {
+			if (Math.abs(velSpeed) > maxSpeed && !inHyperspace) {
 				//limits the speed of the ship to maxSpeed.
 				velocity.x = Math.cos(velAngle) * maxSpeed;
 				velocity.y = Math.sin(velAngle) * maxSpeed;
 			}
 			
+		}
+		
+		public function hyperSpace():void {
+			if (hyperTarget == null) {
+				inHyperspace = false;
+				return;
+			}
+			if (energyCur < 100) {
+				inHyperspace = false;
+				SpaceMessage.push(new SpaceMessage("Insufficient energy to complete hyperjump.", 10, 0xffffff00));
+				return;
+			}
+			var goalFacing:Number = MathE.angleBetweenPoints(Main.spaceScreen.currentSystem.getCenter(), hyperTarget.getCenter());
+			if (Math.abs(MathE.turnDifference(facingAngle, goalFacing)) < 0.1) {
+				thrust();
+				if (velSpeed > maxSpeed * 10) {
+					velSpeed = maxSpeed;
+					inHyperspace = false;
+					hyperTarget = null;
+					energyCur -= 100;
+					if (playerControlled) {
+						Main.spaceScreen.jumpSystems(Main.spaceScreen.currentSystem, Main.player.systemTarget);
+					} else {
+						this.removeFromScreen();
+						if (true) { // not a persistent ship, ie a mission ship
+							this.destroy();
+						}
+						// Handle other ships hypering out here.
+					}
+				}
+			} else {
+				turnTowardTarget(goalFacing);
+			}
 		}
 		
 		private function checkCaps():void {
@@ -505,6 +560,30 @@ package gameObjects
 		}
 		
 		/**
+		 * Mostly-internal function for when the ship is turning clockwise.
+		 */
+		public function turnRight():void {
+			if(energyCur > (totalMass * FlxG.elapsed) / 1000) {
+				facingAngle += rcs * FlxG.elapsed;
+				energyCur -= (totalMass * FlxG.elapsed) / 1000;
+				if (facingAngle > 2 * Math.PI) {
+					facingAngle -= 2 * Math.PI;
+				}
+			}
+		}
+		
+		public function turnTowardTarget(goalAngle:Number):void {
+			var turn:Number = MathE.turnDifference(facingAngle, goalAngle);
+			if (Math.abs(turn) < rcs * FlxG.elapsed) {
+				//facingAngle = goalAngle; // if the amount to turn is less than the ship can turn this frame, just match the goalAngle.
+			} else if (turn > 0) {
+				turnRight();
+			} else {
+				turnLeft();
+			}
+		}
+		
+		/**
 		 * Function for handling when the player clicks on a planet.
 		 */
 		public function clickCheck():void {
@@ -538,18 +617,6 @@ package gameObjects
 			Main.spaceScreen.selectorLayor.add(selection);
 		}
 		
-		/**
-		 * Mostly-internal function for when the ship is turning clockwise.
-		 */
-		public function turnRight():void {
-			if(energyCur > (totalMass * FlxG.elapsed) / 1000) {
-				facingAngle += rcs * FlxG.elapsed;
-				energyCur -= (totalMass * FlxG.elapsed) / 1000;
-				if (facingAngle > 2 * Math.PI) {
-					facingAngle -= 2 * Math.PI;
-				}
-			}
-		}
 		
 		public function thrust():void {
 			if(energyCur > thrustPower * FlxG.elapsed / 1000) {

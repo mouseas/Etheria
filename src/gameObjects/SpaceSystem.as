@@ -29,11 +29,6 @@ package gameObjects {
 		public static var data:XML;
 		
 		/**
-		 * Number of systems to attempt to load from systems.txt
-		 */
-		public static const NUM_SYSTEMS:int = 2;
-		
-		/**
 		 * The name of the system.
 		 */
 		public function get name():String {
@@ -213,20 +208,20 @@ package gameObjects {
 		 */
 		public function getFocus():void {
 			if (selection != null) {
-				Main.spaceScreen.topLayer.remove(selection, true);
+				Main.spaceScreen.mapLayer.remove(selection, true);
 				selection.destroy();
 			}
 			selection = new Selection(this);
 			selection.setCameras(Main.map);
 			
-			Main.spaceScreen.topLayer.add(selection);
+			Main.spaceScreen.mapLayer.add(selection);
 		}
 		
 		/**
 		 * Call when system is de-selected, ie another system is selected.
 		 */
 		public function loseFocus():void {
-			Main.spaceScreen.topLayer.remove(selection, true);
+			Main.spaceScreen.mapLayer.remove(selection, true);
 			selection.destroy();
 		}
 		

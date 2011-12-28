@@ -76,7 +76,11 @@ package gameObjects {
 		}
 		
 		
-		
 	}
 	
+	/*class SmallSelection extends Selection {
+		
+		[Embed(source = "../../lib/selection-corner-small.png")]private var selectionCorner:Class;
+		
+	}*/
 }
