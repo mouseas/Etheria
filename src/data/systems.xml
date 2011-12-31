@@ -2,36 +2,472 @@
 <data>
 	<system id="0">
 		<name>Sol</name>
-		<x>0</x>
-		<y>0</y>
+		<x>-49</x>
+		<y>-65</y>
 		<connection>1</connection>
-		<connection>2</connection>
+		<connection>5</connection>
+		<connection>50</connection>
 	</system>
 	<system id="1">
 		<name>Alpha Centauri</name>
-		<x>-25</x>
-		<y>-10</y>
+		<x>-29</x>
+		<y>-90</y>
 		<connection>0</connection>
-		<connection>4</connection>
 		<description>This system is owned by the Fedora Empire. Please obey the laws.</description>
 	</system>
 	<system id="2">
-		<name>Test2</name>
-		<x>15</x>
-		<y>25</y>
-		<connection>0</connection>
+		<name>Test02</name>
+		<x>-42</x>
+		<y>-18</y>
+		<connection>11</connection>
 		<connection>3</connection>
 	</system>
 	<system id="3">
-		<name>Test3</name>
-		<x>-20</x>
-		<y>60</y>
+		<name>Test03</name>
+		<x>-55</x>
+		<y>-43</y>
 		<connection>2</connection>
+		<connection>4</connection>
+		<connection>5</connection>
+		<connection>10</connection>
 	</system>
 	<system id="4">
-		<name>Test4</name>
+		<name>Test04</name>
+		<x>-65</x>
+		<y>-5</y>
+		<connection>3</connection>
+		<connection>6</connection>
+		<connection>10</connection>
+	</system>
+	<system id="5">
+		<name>Test05</name>
+		<x>-65</x>
+		<y>-72</y>
+		<connection>3</connection>
+		<connection>0</connection>
+	</system>
+	<system id="6">
+		<name>Test06</name>
+		<x>-90</x>
+		<y>3</y>
+		<connection>7</connection>
+		<connection>4</connection>
+		<connection>9</connection>
+		<connection>12</connection>
+	</system>
+	<system id="7">
+		<name>Test07</name>
+		<x>-96</x>
+		<y>20</y>
+		<connection>6</connection>
+		<connection>9</connection>
+		<connection>15</connection>
+		<connection>16</connection>
+		<connection>46</connection>
+	</system>
+	<system id="8">
+		<name>Test08</name>
+		<x>-107</x>
+		<y>86</y>
+		<connection>46</connection>
+		<connection>16</connection>
+	</system>
+	<system id="9">
+		<name>Test09</name>
+		<x>-112</x>
+		<y>14</y>
+		<connection>10</connection>
+		<connection>6</connection>
+		<connection>7</connection>
+		<connection>46</connection>
+	</system>
+	<system id="10">
+		<name>Test10</name>
+		<x>-120</x>
+		<y>-35</y>
+		<connection>3</connection>
+		<connection>4</connection>
+		<connection>9</connection>
+	</system>
+	<system id="11">
+		<name>Test11</name>
+		<x>5</x>
+		<y>5</y>
+		<connection>2</connection>
+		<connection>31</connection>
+		<connection>12</connection>
+	</system>
+	<system id="12">
+		<name>Test12</name>
+		<x>12</x>
+		<y>13</y>
+		<connection>11</connection>
+		<connection>49</connection>
+		<connection>17</connection>
+		<connection>15</connection>
+		<connection>6</connection>
+	</system>
+	<system id="13">
+		<name>Test13</name>
+		<x>-52</x>
+		<y>63</y>
+		<connection>14</connection>
+		<connection>48</connection>
+	</system>
+	<system id="14">
+		<name>Test14</name>
+		<x>-50</x>
+		<y>76</y>
+		<connection>13</connection>
+		<connection>18</connection>
+		<connection>47</connection>
+		<connection>16</connection>
+	</system>
+	<system id="15">
+		<name>Test15</name>
 		<x>-60</x>
-		<y>28</y>
-		<connection>1</connection>
+		<y>58</y>
+		<connection>12</connection>
+		<connection>7</connection>
+		<connection>16</connection>
+	</system>
+	<system id="16">
+		<name>Test16</name>
+		<x>-69</x>
+		<y>62</y>
+		<connection>15</connection>
+		<connection>14</connection>
+		<connection>7</connection>
+		<connection>8</connection>
+	</system>
+	<system id="17">
+		<name>Test17</name>
+		<x>-23</x>
+		<y>42</y>
+		<connection>12</connection>
+		<connection>49</connection>
+		<connection>20</connection>
+		<connection>19</connection>
+		<connection>48</connection>
+	</system>
+	<system id="18">
+		<name>Test18</name>
+		<x>-8</x>
+		<y>82</y>
+		<connection>19</connection>
+		<connection>14</connection>
+		<connection>17</connection>
+	</system>
+	<system id="19">
+		<name>Test19</name>
+		<x>1</x>
+		<y>60</y>
+		<connection>18</connection>
+		<connection>17</connection>
+		<connection>21</connection>
+		<connection>48</connection>
+	</system>
+	<system id="20">
+		<name>Test20</name>
+		<x>15</x>
+		<y>48</y>
+		<connection>21</connection>
+		<connection>17</connection>
+		<connection>22</connection>
+	</system>
+	<system id="21">
+		<name>Test21</name>
+		<x>20</x>
+		<y>57</y>
+		<connection>20</connection>
+		<connection>19</connection>
+		<connection>23</connection>
+		<connection>24</connection>
+	</system>
+	<system id="22">
+		<name>Test22</name>
+		<x>28</x>
+		<y>42</y>
+		<connection>49</connection>
+		<connection>20</connection>
+		<connection>24</connection>
+	</system>
+	<system id="23">
+		<name>Test23</name>
+		<x>48</x>
+		<y>78</y>
+		<connection>21</connection>
+		<connection>24</connection>
+	</system>
+	<system id="24">
+		<name>Test24</name>
+		<x>42</x>
+		<y>52</y>
+		<connection>22</connection>
+		<connection>21</connection>
+		<connection>23</connection>
+		<connection>25</connection>
+	</system>
+	<system id="25">
+		<name>Test25</name>
+		<x>56</x>
+		<y>30</y>
+		<connection>24</connection>
+		<connection>45</connection>
+		<connection>27</connection>
+	</system>
+	<system id="26">
+		<name>Test26</name>
+		<x>63</x>
+		<y>12</y>
+		<connection>27</connection>
+		<connection>35</connection>
+	</system>
+	<system id="27">
+		<name>Test27</name>
+		<x>80</x>
+		<y>24</y>
+		<connection>35</connection>
+		<connection>26</connection>
+		<connection>25</connection>
+		<connection>57</connection>
+	</system>
+	<system id="28">
+		<name>Test28</name>
+		<x>98</x>
+		<y>80</y>
+		<connection>57</connection>
+		<connection>29</connection>
+	</system>
+	<system id="29">
+		<name>Test29</name>
+		<x>123</x>
+		<y>91</y>
+		<connection>28</connection>
+		<connection>30</connection>
+	</system>
+	<system id="30">
+		<name>Test30</name>
+		<x>144</x>
+		<y>62</y>
+		<connection>58</connection>
+		<connection>57</connection>
+		<connection>29</connection>
+		<connection>43</connection>
+	</system>
+	<system id="31">
+		<name>Test31</name>
+		<x>13</x>
+		<y>-7</y>
+		<connection>11</connection>
+		<connection>50</connection>
+		<connection>45</connection>
+	</system>
+	<system id="32">
+		<name>Test32</name>
+		<x>16</x>
+		<y>-82</y>
+		<connection>50</connection>
+	</system>
+	<system id="33">
+		<name>Test33</name>
+		<x>69</x>
+		<y>-95</y>
+		<connection>34</connection>
+	</system>
+	<system id="34">
+		<name>Test34</name>
+		<x>73</x>
+		<y>-70</y>
+		<connection>33</connection>
+		<connection>52</connection>
+		<connection>37</connection>
+	</system>
+	<system id="35">
+		<name>Test35</name>
+		<x>85</x>
+		<y>-3</y>
+		<connection>53</connection>
+		<connection>26</connection>
+		<connection>27</connection>
+		<connection>54</connection>
+	</system>
+	<system id="36">
+		<name>Test36</name>
+		<x>115</x>
+		<y>12</y>
+		<connection>54</connection>
+		<connection>57</connection>
+		<connection>41</connection>
+	</system>
+	<system id="37">
+		<name>Test37</name>
+		<x>112</x>
+		<y>-60</y>
+		<connection>38</connection>
+		<connection>34</connection>
+		<connection>52</connection>
+		<connection>54</connection>
+	</system>
+	<system id="38">
+		<name>Test38</name>
+		<x>147</x>
+		<y>-79</y>
+		<connection>37</connection>
+		<connection>39</connection>
+	</system>
+	<system id="39">
+		<name>Test39</name>
+		<x>168</x>
+		<y>-48</y>
+		<connection>38</connection>
+		<connection>56</connection>
+	</system>
+	<system id="40">
+		<name>Test40</name>
+		<x>175</x>
+		<y>-16</y>
+		<connection>56</connection>
+		<connection>41</connection>
+	</system>
+	<system id="41">
+		<name>Test41</name>
+		<x>155</x>
+		<y>20</y>
+		<connection>40</connection>
+		<connection>36</connection>
+		<connection>55</connection>
+		<connection>58</connection>
+	</system>
+	<system id="42">
+		<name>Test42</name>
+		<x>172</x>
+		<y>100</y>
+		<connection>43</connection>
+	</system>
+	<system id="43">
+		<name>Test43</name>
+		<x>178</x>
+		<y>85</y>
+		<connection>42</connection>
+		<connection>44</connection>
+		<connection>30</connection>
+	</system>
+	<system id="44">
+		<name>Test44</name>
+		<x>191</x>
+		<y>83</y>
+		<connection>43</connection>
+	</system>
+	<system id="45">
+		<name>Test45</name>
+		<x>45</x>
+		<y>8</y>
+		<connection>25</connection>
+		<connection>31</connection>
+	</system>
+	<system id="46">
+		<name>Test46</name>
+		<x>-92</x>
+		<y>54</y>
+		<connection>9</connection>
+		<connection>7</connection>
+		<connection>8</connection>
+	</system>
+	<system id="47">
+		<name>Test47</name>
+		<x>-31</x>
+		<y>94</y>
+		<connection>18</connection>
+		<connection>14</connection>
+	</system>
+	<system id="48">
+		<name>Test48</name>
+		<x>-25</x>
+		<y>62</y>
+		<connection>13</connection>
+		<connection>17</connection>
+		<connection>19</connection>
+	</system>
+	<system id="49">
+		<name>Test49</name>
+		<x>-9</x>
+		<y>32</y>
+		<connection>12</connection>
+		<connection>17</connection>
+		<connection>22</connection>
+	</system>
+	<system id="50">
+		<name>Test50</name>
+		<x>10</x>
+		<y>-50</y>
+		<connection>0</connection>
+		<connection>32</connection>
+		<connection>31</connection>
+		<connection>51</connection>
+	</system>
+	<system id="51">
+		<name>Test51</name>
+		<x>52</x>
+		<y>-32</y>
+		<connection>50</connection>
+		<connection>53</connection>
+	</system>
+	<system id="52">
+		<name>Test52</name>
+		<x>64</x>
+		<y>-39</y>
+		<connection>53</connection>
+		<connection>34</connection>
+		<connection>37</connection>
+	</system>
+	<system id="53">
+		<name>Test53</name>
+		<x>59</x>
+		<y>-23</y>
+		<connection>51</connection>
+		<connection>52</connection>
+		<connection>35</connection>
+	</system>
+	<system id="54">
+		<name>Test54</name>
+		<x>111</x>
+		<y>-17</y>
+		<connection>35</connection>
+		<connection>37</connection>
+		<connection>56</connection>
+		<connection>36</connection>
+		<connection>55</connection>
+	</system>
+	<system id="55">
+		<name>Test55</name>
+		<x>142</x>
+		<y>-10</y>
+		<connection>54</connection>
+		<connection>41</connection>
+	</system>
+	<system id="56">
+		<name>Test56</name>
+		<x>140</x>
+		<y>-49</y>
+		<connection>39</connection>
+		<connection>40</connection>
+		<connection>54</connection>
+	</system>
+	<system id="57">
+		<name>Test57</name>
+		<x>95</x>
+		<y>36</y>
+		<connection>27</connection>
+		<connection>36</connection>
+		<connection>28</connection>
+		<connection>30</connection>
+	</system>
+	<system id="58">
+		<name>Test58</name>
+		<x>132</x>
+		<y>33</y>
+		<connection>41</connection>
+		<connection>30</connection>
 	</system>
 </data>
