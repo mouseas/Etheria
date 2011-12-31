@@ -99,8 +99,8 @@
 	</system>
 	<system id="12">
 		<name>Test12</name>
-		<x>12</x>
-		<y>13</y>
+		<x>-34</x>
+		<y>30</y>
 		<connection>11</connection>
 		<connection>49</connection>
 		<connection>17</connection>
@@ -156,7 +156,7 @@
 		<y>82</y>
 		<connection>19</connection>
 		<connection>14</connection>
-		<connection>17</connection>
+		<connection>47</connection>
 	</system>
 	<system id="19">
 		<name>Test19</name>

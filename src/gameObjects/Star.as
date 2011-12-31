@@ -39,6 +39,11 @@ package gameObjects
 		 */
 		public static var parent:SpaceState;
 		
+		/**
+		 * Bin from which to pull recycled stars.
+		 */
+		public static var recycleBin:Array = new Array();
+		
 		
 		public function Star(posX:Number, posY:Number):void {
 			super(posX, posY);
@@ -52,12 +57,32 @@ package gameObjects
 			}
 			
 			//Randomly pick which frame of the star to display
-			frame = int(Math.random() * NUM_FRAMES)
+			frame = int(Math.random() * NUM_FRAMES);
 			
 			//Set the star's scroll factor (and thus apparent distance).
 			var _scrollFactor:Number = (Math.random() * (SCROLL_FACTOR_MAX - SCROLL_FACTOR_MIN) + SCROLL_FACTOR_MIN);
 			scrollFactor.x = scrollFactor.y = _scrollFactor; //assigns _scrollFactor's value to both y and x values of scrollFactor.
 			
+		}
+		
+		public static function makeStar(_x:Number = 0, _y:Number = 0):Star {
+			var result:Star;
+			if (recycleBin.length > 0) {
+				result = recycleBin.pop();
+				result.x = _x;
+				result.y = _y;
+				result.frame = int(Math.random() * NUM_FRAMES);
+				var _scrollFactor:Number = (Math.random() * (SCROLL_FACTOR_MAX - SCROLL_FACTOR_MIN) + SCROLL_FACTOR_MIN);
+				result.scrollFactor.x = result.scrollFactor.y = _scrollFactor;
+				
+			} else {
+				result = new Star(_x, _y);
+			}
+			return result;
+		}
+		
+		public function recycle():void {
+			recycleBin.push(this);
 		}
 		
 		/**
@@ -73,21 +98,24 @@ package gameObjects
 		 */
 		public static function checkStarsOnScreen():void {
 			for (var i:int = 0; i < parent.starLayer.length; i++) {
-				var star:Star = parent.starLayer.members[i];
-				if (star != null && !star.onScreen(parent.viewPortCam)) {
-					var point:FlxPoint = star.getScreenXY(null,parent.viewPortCam);
-					//star.kill();
+				var oldStar:Star = parent.starLayer.members[i];
+				if (oldStar != null && !oldStar.onScreen(parent.viewPortCam)) {
+					var point:FlxPoint = oldStar.getScreenXY(null,parent.viewPortCam);
+					oldStar.recycle();
+					parent.starLayer.remove(oldStar);
+					
+					var newStar:Star;
 					
 					if (Main.player.ship.velocity.x > 0 && point.x < 0) {
-						star = spawnStarRight();
+						newStar = spawnStarRight();
 					} else if (Main.player.ship.velocity.x < 0 && point.x > parent.viewPortCam.width) {
-						star = spawnStarLeft();
+						newStar = spawnStarLeft();
 					} else if (Main.player.ship.velocity.y > 0 && point.y < 0) {
-						star = spawnStarBottom();
+						newStar = spawnStarBottom();
 					} else if (Main.player.ship.velocity.y < 0 && point.y > parent.viewPortCam.height) {
-						star = spawnStarTop();
+						newStar = spawnStarTop();
 					}
-					parent.starLayer.members[i] = star;
+					parent.starLayer.add(newStar);
 					point = null;
 				}
 				
@@ -107,7 +135,7 @@ package gameObjects
 				parent.starLayer.remove(parent.starLayer.members[0], true);
 			}
 			for (var i:int = 0; i < NUM_STARS; i++) { // Then create NUM_STARS new stars on the visible screen.
-				var star:Star = new Star(0, 0);
+				var star:Star = makeStar(0, 0);
 				star.x = (parent.viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * parent.viewPortCam.width);
 				star.y = (parent.viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * parent.viewPortCam.height);
 				parent.starLayer.add(star);
@@ -119,7 +147,7 @@ package gameObjects
 		 * @return The star generated.
 		 */
 		public static function spawnStarTop():Star {
-			var star:Star = new Star(0, 0);
+			var star:Star = makeStar(0, 0);
 			star.x = (parent.viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * parent.viewPortCam.width);
 			star.y = (parent.viewPortCam.scroll.y) * star.scrollFactor.y;
 			return star;
@@ -129,7 +157,7 @@ package gameObjects
 		 * @return The star generated.
 		 */
 		public static function spawnStarLeft():Star {
-			var star:Star = new Star(0, 0);
+			var star:Star = makeStar(0, 0);
 			star.x = (parent.viewPortCam.scroll.x) * star.scrollFactor.x;
 			star.y = (parent.viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * parent.viewPortCam.height);
 			return star;
@@ -139,7 +167,7 @@ package gameObjects
 		 * @return The star generated.
 		 */
 		public static function spawnStarBottom():Star {
-			var star:Star = new Star(0, 0);
+			var star:Star = makeStar(0, 0);
 			star.x = (parent.viewPortCam.scroll.x * star.scrollFactor.x) + (Math.random() * parent.viewPortCam.width) ;
 			star.y = (parent.viewPortCam.scroll.y * star.scrollFactor.y) + parent.viewPortCam.height;
 			return star;
@@ -149,7 +177,7 @@ package gameObjects
 		 * @return The star generated.
 		 */
 		public static function spawnStarRight():Star {
-			var star:Star = new Star(0, 0);
+			var star:Star = makeStar(0, 0);
 			star.x = (parent.viewPortCam.scroll.x * star.scrollFactor.x) + parent.viewPortCam.width;
 			star.y = (parent.viewPortCam.scroll.y * star.scrollFactor.y) + (Math.random() * parent.viewPortCam.height);
 			return star;
