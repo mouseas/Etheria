@@ -109,6 +109,11 @@ package gameObjects {
 		public var population:int; //not used yet
 		
 		/**
+		 * The decimal growth of the planet's population. Used to allow for growth of small populations over time ( <1 birth/day)
+		 */
+		public var popPartial:Number;
+		
+		/**
 		 * Rate at which the population grows in 1 year's time. Earth's current rate is 1.092 % or 0.01092
 		 * High growth should be around 2% (0.02), and low growth should be around 0.75% (0.075). Negative numbers mean
 		 * more deaths than births - population decline.
@@ -318,7 +323,20 @@ package gameObjects {
 			return name + " [ID:" + ID + ", System: " + system.name + "]";
 		}
 		
-		
+		/**
+		 * Grows a population whenever time passes
+		 * @param	days Number of days that have passed.
+		 */
+		public function updatePopulation(days:int):void {
+			var growth:Number = days * (popGrowthRate / 365) * population;
+			population = (int)(growth);
+			popPartial += growth - (int)(growth);
+			while (popPartial > 1) {
+				popPartial--;
+				population++;
+			}
+			
+		}
 		
 		
 		

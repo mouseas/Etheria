@@ -6,6 +6,7 @@ package {
     import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import org.flixel.*;
+	import gameObjects.*;
 
 	//This code seems to be designed to send a file to a specified page online. Could be modified not only to open saved
 	// games, but also to pass data to a php server to maybe run multi-player content.
@@ -20,6 +21,11 @@ package {
 		 * The data loaded from the save file.
 		 */
 		public var data:ByteArray;
+		
+		/**
+		 * XML data loaded from the file.
+		 */
+		public var xml:XML;
 		
 		/**
 		 * Whether loading has started.
@@ -116,16 +122,8 @@ package {
 		 * @return An array of FileFilters to limit what file types to allow.
 		 */
         private function getTypes():Array {
-            var allTypes:Array = new Array(getTextTypeFilter(), getImageTypeFilter());
+            var allTypes:Array = new Array(new FileFilter("Etheria Save Games (*.eth, *.xml)", "*.eth;*.xml"));
             return allTypes;
-        }
-
-        private function getImageTypeFilter():FileFilter {
-            return new FileFilter("Images (*.jpg, *.jpeg, *.gif, *.png)", "*.jpg;*.jpeg;*.gif;*.png");
-        }
-
-        private function getTextTypeFilter():FileFilter {
-            return new FileFilter("Text Files (*.txt, *.rtf)", "*.txt;*.rtf");
         }
 		
 		/**
@@ -144,6 +142,44 @@ package {
         private function completeHandler(event:Event):void {
 			doneLoading = true;
 			data = file.data;
+			xml = new XML(data.toString())
+			
+			//Parse the loaded data, checking for errors along the way.
+			
+			//Player data
+			var player:Player = Main.player;
+			player.money = xml.player.money
+			player.ship = Ship.cloneShip(xml.player.ship);
+			player.ship.fuelCur = xml.player.ship.fuelCur;
+			player.ship.energyCur = xml.player.ship.energyCur;
+			player.ship.shieldCur = xml.player.ship.shieldCur;
+			player.ship.armorCur = xml.player.ship.armorCur;
+			player.ship.structCur = xml.player.ship.structCur;
+			
+			//Load the system data (explored, etc)
+			for (var i:int = 0; i < xml.system.length(); i++) {
+				var s:SpaceSystem = SpaceSystem.allSystems.members[i];
+				s.explored = xml.system[i].explored == "true";
+			}
+			
+			//Load the planet data (population, commodities, whether they like the player, etc.)
+			for (i = 0; i < xml.planet.length(); i++) {
+				var p:Planet = Planet.allPlanets.members[i];
+				p.population = xml.planet[i].population;
+			}
+			
+			//Load current system and place player at the planet he last landed on
+			Main.spaceScreen.loadSystem(SpaceSystem.allSystems.members[xml.currentSystem]);
+			var curPlanet:Planet = Planet.allPlanets.members[xml.currentPlanet];
+			player.ship.x = curPlanet.x + (curPlanet.width / 2) - (player.ship.width / 2);
+			player.ship.y = curPlanet.y + (curPlanet.height / 2) - (player.ship.height / 2);
+			
+			//clear out the message log when the saved game is loaded.
+			if (SpaceMessage.messageLog != null ) {
+				SpaceMessage.messageLog.destroy();
+			}
+			SpaceMessage.messageLog = new FlxGroup();
+			
             trace("completeHandler: " + event);
 			if (callback != null) {
 				callback();

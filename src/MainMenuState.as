@@ -32,7 +32,12 @@ package
 		/**
 		 * Array of strings loaded from file.
 		 */
-		public var loadedData:Array;
+		public var loadedData:String;
+		
+		/**
+		 * XML data loaded from the save file.
+		 */
+		public var xml:XML;
 		
 		/**
 		 * Button to load a saved game.
@@ -79,21 +84,9 @@ package
 		}
 		
 		public function loadComplete():void {
-			var str:String = load.data.toString();
 			remove(load, true);
 			load.destroy();
 			load = null;
-			loadedData = str.split("\n");
-			str = null;
-			
-			//Parse the loaded data, checking for errors along the way.
-			
-			
-			//clear out the message log when the saved game is loaded.
-			if (SpaceMessage.messageLog != null ) {
-				SpaceMessage.messageLog.destroy();
-			}
-			SpaceMessage.messageLog = new FlxGroup();
 			
 		}
 		
@@ -127,10 +120,12 @@ package
 				if(!Main.spaceScreen.initialized) {
 					Main.spaceScreen.initPlayingField();
 				}
+				if (Main.spaceScreen.currentSystem == null) {
+					Main.spaceScreen.loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
+				}
 				
 				loadTheUniverse();
 				
-				Main.spaceScreen.loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
 				Main.spaceScreen.dialogLayer.remove(this, true);
 				Main.spaceScreen.unfreeze();
 				this.destroy();

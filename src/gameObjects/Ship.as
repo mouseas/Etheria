@@ -661,7 +661,11 @@ package gameObjects
 		 * @return Ship's name and ID.
 		 */
 		override public function toString():String {
-			return "Ship: " + name + " ID: " + ID;
+			var str:String = "Ship: " + name + " ID: " + ID;
+			if (playerControlled) {
+				str += " Player Ship!"
+			}
+			return str;
 		}
 	}
 	

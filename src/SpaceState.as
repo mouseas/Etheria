@@ -196,18 +196,12 @@ package
 			SpaceSystem.generateSystems();
 			Planet.generatePlanets();
 			
-			
-		}
-		
-		/**
-		 * Called when the game first starts up. Starts the MainMenuState.
-		 */
-		override public function create():void {
-			
 			//Layers
 			add(playingField);
 			playingField.add(starLayer);
 			playingField.add(planetLayer);
+			planetList = new FlxGroup();
+			planetLayer.add(planetList);
 			playingField.add(asteroidLayer);
 			playingField.add(shipsLayer);
 			playingField.add(projectileLayer);
@@ -218,13 +212,24 @@ package
 			add(mapLayer);
 			add(topLayer);
 			
+			mapOn = false; // Might want to just get rid of this once dialog boxes are properly implemented.
+			
+			Main.player = player = new Player(this);
+			date = new Date(2142, 7, 22);
+			
+			//loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
+			
+		}
+		
+		/**
+		 * Called when the game first starts up. Starts the MainMenuState.
+		 */
+		override public function create():void {
+			
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
 			startMenu.create();
 			dialogLayer.add(startMenu);
-			
-			mapOn = false; // Might want to just get rid of this once dialog boxes are properly implemented.
-			
 		}
 		
 		/**
@@ -232,11 +237,6 @@ package
 		 * field together before starting play.
 		 */
 		public function initPlayingField():void {
-			
-			Main.player = player = new Player(this);
-			date = new Date(2142, 7, 22);
-			
-			
 			frozen = false;
 			
 			/*if (dialogScreen != null) {
@@ -248,16 +248,10 @@ package
 			FlxG.addCamera(viewPortCam);
 			FlxG.addCamera(radarCam);
 			
-			planetList = new FlxGroup();
-			planetLayer.add(planetList);
-			
 			add(SpaceMessage.messageLog);
 			
 			
-			//Initialize the Player and their ship).
-			
-			player.ship.x = (Math.random() * 500) - 250;
-			player.ship.y = (Math.random() * 500) - 250;
+			// Add the Player and their ship, and have the viewport follow the ship.
 			add(player);
 			player.ship.addToScreen();
 			viewPortCam.follow(player.ship);
@@ -298,7 +292,13 @@ package
 						}
 					}
 					if (FlxG.keys.justPressed("BACKSLASH")) {
-						new UIScreen();
+						var sysNum:int = SpaceSystem.allSystems.members.indexOf(currentSystem);
+						sysNum++;
+						if (SpaceSystem.allSystems.length - 1 > sysNum) {
+							loadSystem(SpaceSystem.allSystems.members[sysNum]);
+						} else {
+							loadSystem(SpaceSystem.allSystems.members[0]);
+						}
 					}
 					
 					if (FlxG.keys.justPressed("M")) {
@@ -321,7 +321,7 @@ package
 		 * @param	s System to load.
 		 */
 		public function loadSystem(s:SpaceSystem):void {
-			date.date++;
+			date.date++; // This will be moved to its own handler later.
 			
 			//pull radar objects from screen.
 			for (var i:int = 0; i < planetList.length; i++) {
@@ -332,17 +332,30 @@ package
 				}
 				p = null;
 			}
+			
+			//remove ships
 			while (shipsLayer.length > 0) {
 				var oldSysShip:Ship = shipsLayer.members[0];
+				trace("removing " + oldSysShip);
 				oldSysShip.removeFromScreen();
+				oldSysShip = null;
 			}
-			player.ship.addToScreen();
+			player.ship.addToScreen(); // ...but add the player's ship back in.
 			
+			// remove the planet list from the previous system.
+			planetLayer.remove(planetList, true);
+			
+			// clear the player's targets from the previous system.
+			player.planetTarget = null;
+			player.shipTarget = null;
+			
+			//Load the new system and planets
 			currentSystem = s;
 			currentSystem.explored = true;
-			SpaceSystem.updateMap();
-			planetLayer.replace(planetList, currentSystem.planetList); // replaces it in the display position (draw order)
 			planetList = currentSystem.planetList; // replaces the object reference
+			planetLayer.add(planetList); // replaces it in the display position (draw order)
+			
+			SpaceSystem.updateMap();
 			
 			// add radar objects to screen
 			for (i = 0; i < planetList.length; i++) {
@@ -353,6 +366,8 @@ package
 				}
 				p = null;
 			}
+			
+			// Re-center the map on the current system
 			var scroll:FlxPoint = currentSystem.getCenter();
 			scroll.x -= mapCam.width / 2;
 			scroll.y -= mapCam.height / 2;
@@ -363,11 +378,10 @@ package
 			minimapCam.scroll = scroll;
 			scroll = null;
 			
-			player.planetTarget = null;
-			player.shipTarget = null;
-			
 			Star.resetStars();
 			
+			//Add the new system's ships (mission and random locals)
+			//currently in debug.
 			var newShip:Ship = Ship.cloneShip(0);
 			newShip.x = Math.random() * 200;
 			newShip.y = Math.random() * 200;
@@ -385,8 +399,6 @@ package
 			newShip.y = Math.random() * 200;
 			newShip.addToScreen();
 			//trace(newShip);
-			
-			// generate and load any ships in the system.
 		}
 		
 		/**

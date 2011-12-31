@@ -54,8 +54,11 @@ package gameObjects {
 			drawLine(p1.x - topLeft.x, p1.y - topLeft.y, p2.x - topLeft.x, p2.y - topLeft.y, 0xFFAAAAAA);
 		}
 		
+		/**
+		 * Shows the ConnectionLine only if both systems are visible and at least one of them is explored.
+		 */
 		public function checkVisibility():void {
-			if (system1.visible && system2.visible) {
+			if (system1.visible && system2.visible && (system1.explored || system2.explored)) {
 				visible = true;
 			} else {
 				visible = false;

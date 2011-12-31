@@ -191,13 +191,23 @@ package gameObjects {
 				if (sys.explored) {
 					sys.visible = true;
 					sys.nameText.visible = true;
-					for (var j:int = 0; j < sys.connectionsList.length; j++) {
+					/*for (var j:int = 0; j < sys.connectionsList.length; j++) {
 						var connectedSys:SpaceSystem = sys.connectionsList.members[j];
 						if (!connectedSys.explored) {
 							connectedSys.visible = true;
 							connectedSys.nameText.visible = false;
 						}
+					}*/
+				} else {
+					sys.nameText.visible = false;
+					var vis:Boolean = false;
+					for (var j:int = 0; j < sys.connectionsList.length; j++) {
+						var connectedSys:SpaceSystem = sys.connectionsList.members[j];
+						if (connectedSys.explored) {
+							vis = true;
+						}
 					}
+					sys.visible = vis;
 				}
 			}
 			ConnectionLine.updateMap();

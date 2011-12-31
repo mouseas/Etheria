@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+	<player>
+		<money>15831</money>
+		<shipType>1</shipType>
+		<ship>
+			<fuelCur>450</fuelCur>
+			<energyCur>160</energyCur>
+			<shieldCur>100</shieldCur>
+			<armorCur>40</armorCur>
+			<structCur>15</structCur>
+		</ship>
+	</player>
+	<currentSystem>3</currentSystem>
+	<currentPlanet>3</currentPlanet>
+	<date>
+		<year>2012</year>
+		<month>10</month>
+		<day>15</day>
+	</date>
+	<missionFlag>true</missionFlag>
+	<planet id="0">
+		<population>23985163000</population>
+	</planet>
+	<planet id="1">
+		<population>0</population>
+	</planet>
+	<planet id="2">
+		<population>0</population>
+	</planet>
+	<planet id="3">
+		<population>23985163000</population>
+	</planet>
+	<system id="0">
+		<explored>false</explored>
+	</system>
+	<system id="1">
+		<explored>true</explored>
+	</system>
+	<system id="2">
+		<explored>true</explored>
+	</system>
+	<system id="3">
+		<explored>true</explored>
+	</system>
+	<system id="4">
+		<explored>false</explored>
+	</system>
+</data>
