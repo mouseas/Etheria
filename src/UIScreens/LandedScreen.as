@@ -17,6 +17,11 @@ package UIScreens {
 		public var refuelButton:FlxButton;
 		
 		/**
+		 * Save button.
+		 */
+		public var saveButton:FlxButton;
+		
+		/**
 		 * Constructor.
 		 * @param	_planet Which planet the player has landed on, and from which to draw info and image.
 		 */
@@ -29,6 +34,9 @@ package UIScreens {
 				refuelButton.scrollFactor = Main.NO_SCROLL;
 				add(refuelButton);
 			}
+			saveButton = new FlxButton(OKButton.x, OKButton.y + 60, "Save", save);
+			saveButton.scrollFactor = Main.NO_SCROLL;
+			add(saveButton);
 			
 		}
 		
@@ -74,6 +82,13 @@ package UIScreens {
 				refuelButton.destroy();
 				refuelButton = null;
 			}
+		}
+		
+		/**
+		 * Saves the current game data to a file in xml format.
+		 */
+		public function save():void {
+			var save:SaveGame = new SaveGame();
 		}
 		
 		

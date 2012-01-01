@@ -6,7 +6,7 @@
 		<y>500</y>
 		<canLand>true</canLand>
 		<inhabited>true</inhabited>
-		<population>23985163000</population>
+		<population>3985163000</population>
 		<popGrowthRate>0.01092</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet001</spriteImage>
@@ -40,7 +40,7 @@
 		<y>0</y>
 		<canLand>true</canLand>
 		<inhabited>true</inhabited>
-		<population>23985163000</population>
+		<population>3985163000</population>
 		<popGrowthRate>0.01092</popGrowthRate>
 		<system>3</system>
 		<spriteImage>planet000</spriteImage>

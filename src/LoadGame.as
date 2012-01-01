@@ -1,9 +1,8 @@
 package {
-    import flash.display.Sprite;
     import flash.events.*;
     import flash.net.FileFilter;
     import flash.net.FileReference;
-    import flash.net.URLRequest;
+    //;import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	import org.flixel.*;
 	import gameObjects.*;
@@ -14,7 +13,7 @@ package {
     public class LoadGame extends FlxGroup {
 		
 		/* ####################### File-related variables ############################## */
-        private var uploadURL:URLRequest;
+        //private var uploadURL:URLRequest;
         private var file:FileReference;
 		
 		/**
