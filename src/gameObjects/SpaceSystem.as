@@ -249,7 +249,7 @@ package gameObjects {
 					if (FlxG.mouse.justPressed()) {
 						//trace("Clicked on " + name);
 						// System clicked.
-						Main.player.systemTarget = this;
+						Player.p.systemTarget = this;
 					}
 					
 				}

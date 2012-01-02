@@ -11,6 +11,11 @@ package gameObjects
 	public class Player extends FlxSprite {
 		
 		/**
+		 * The global Player object (this used to be in Main).
+		 */
+		public static var p:Player;
+		
+		/**
 		 * The screen which the player's ship is on.
 		 */
 		public var screen:SpaceState;
@@ -18,7 +23,14 @@ package gameObjects
 		/**
 		 * The player's ship.
 		 */
-		public var ship:Ship;
+		public function get ship():Ship {
+			return _ship;
+		}
+		public function set ship(s:Ship):void {
+			s.playerControlled = true;
+			_ship = s;
+		}
+		private var _ship:Ship;
 		
 		/**
 		 * Number of credits the player has.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   <player>
-    <money>10000</money>
+    <money>9504</money>
     <ship>
       <fuelCur>350</fuelCur>
       <energyCur>110</energyCur>
@@ -11,8 +11,8 @@
     </ship>
     <shiptype>0</shiptype>
   </player>
-  <currentSystem>0</currentSystem>
-  <currentPlanet>1</currentPlanet>
+  <currentSystem>3</currentSystem>
+  <currentPlanet>3</currentPlanet>
   <planet id="0">
     <population>-309804296</population>
   </planet>
@@ -35,13 +35,13 @@
     <explored>false</explored>
   </system>
   <system id="3">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="4">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="5">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="6">
     <explored>false</explored>
@@ -56,7 +56,7 @@
     <explored>false</explored>
   </system>
   <system id="10">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="11">
     <explored>false</explored>
@@ -176,7 +176,7 @@
     <explored>false</explored>
   </system>
   <system id="50">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="51">
     <explored>false</explored>
@@ -205,6 +205,6 @@
   <date>
     <year>undefined</year>
     <month>7</month>
-    <day>23</day>
+    <day>26</day>
   </date>
 </data>

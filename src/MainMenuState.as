@@ -57,7 +57,6 @@ package
 		override public function create():void
 		{
 			attemptingToLoad = false;
-			FlxG.mouse.show();
 			
 			background = new FlxSprite(0, 0, bgImage);
 			add(background);

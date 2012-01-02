@@ -106,13 +106,13 @@ package gameObjects
 					
 					var newStar:Star;
 					
-					if (Main.player.ship.velocity.x > 0 && point.x < 0) {
+					if (Player.p.ship.velocity.x > 0 && point.x < 0) {
 						newStar = spawnStarRight();
-					} else if (Main.player.ship.velocity.x < 0 && point.x > parent.viewPortCam.width) {
+					} else if (Player.p.ship.velocity.x < 0 && point.x > parent.viewPortCam.width) {
 						newStar = spawnStarLeft();
-					} else if (Main.player.ship.velocity.y > 0 && point.y < 0) {
+					} else if (Player.p.ship.velocity.y > 0 && point.y < 0) {
 						newStar = spawnStarBottom();
-					} else if (Main.player.ship.velocity.y < 0 && point.y > parent.viewPortCam.height) {
+					} else if (Player.p.ship.velocity.y < 0 && point.y > parent.viewPortCam.height) {
 						newStar = spawnStarTop();
 					}
 					parent.starLayer.add(newStar);
@@ -132,6 +132,7 @@ package gameObjects
 			}
 			while (parent.starLayer.length > 0) { // Clear out any existing stars first
 				//trace(starList.length);
+				//parent.starLayer.members[0].recycle();
 				parent.starLayer.remove(parent.starLayer.members[0], true);
 			}
 			for (var i:int = 0; i < NUM_STARS; i++) { // Then create NUM_STARS new stars on the visible screen.

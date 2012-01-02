@@ -217,12 +217,17 @@ package gameObjects
 		 */
 		public var hyperTarget:SpaceSystem;
 		
+		public var uniqueID:int;
+		public static var numShips:int = 0;
+		
 		/**
 		 * Constructor function.
 		 * @param _parent The screen this ship is on.
 		 * @param typeID What protoship ID to load when creating this ship.
 		 */
 		public function Ship(_parent:SpaceState, typeID:uint):void {
+			uniqueID = numShips++;
+			trace (uniqueID);
 			super(0, 0);
 			ID = typeID;
 			playerControlled = false;
@@ -366,9 +371,7 @@ package gameObjects
 			if (inHyperspace) {
 				hyperSpace();
 			}
-			
 			frame = int((facingAngle / (Math.PI * 2)) * NUM_FRAMES);
-			super.update();
 			
 			velAngle = Math.atan2(velocity.y, velocity.x); // Need to calculate this every cycle. Used in several places.
 			velSpeed = MathE.pythag(velocity.x, velocity.y); // Need to calculate this every cycle too.
@@ -384,6 +387,7 @@ package gameObjects
 				velocity.y = Math.sin(velAngle) * maxSpeed;
 			}
 			
+			super.update();
 		}
 		
 		public function hyperSpace():void {
@@ -405,7 +409,7 @@ package gameObjects
 					hyperTarget = null;
 					energyCur -= 100;
 					if (playerControlled) {
-						Main.spaceScreen.jumpSystems(Main.spaceScreen.currentSystem, Main.player.systemTarget);
+						Main.spaceScreen.jumpSystems(Main.spaceScreen.currentSystem, Player.p.systemTarget);
 					} else {
 						this.removeFromScreen();
 						if (true) { // not a persistent ship, ie a mission ship
@@ -596,7 +600,7 @@ package gameObjects
 					
 					if (FlxG.mouse.justPressed()) {
 						// Ship clicked.
-						Main.player.shipTarget = this;
+						Player.p.shipTarget = this;
 					}
 					
 				}

@@ -29,7 +29,7 @@ package UIScreens {
 			OKButton.label.text = "Leave";
 			planet = _planet;
 			
-			if (planet.inhabited && Main.player.ship.fuelCur < Main.player.ship.fuelCap) {
+			if (planet.inhabited && Player.p.ship.fuelCur < Player.p.ship.fuelCap) {
 				refuelButton = new FlxButton(OKButton.x, OKButton.y + 30, "Refuel", refuel);
 				refuelButton.scrollFactor = Main.NO_SCROLL;
 				add(refuelButton);
@@ -70,7 +70,7 @@ package UIScreens {
 		 */
 		public function refuel():void {
 			if (planet.inhabited) {
-				var p:Player = Main.player;
+				var p:Player = Player.p;
 				if (p.money >= p.ship.fuelCap - p.ship.fuelCur) {
 					p.money -= (int)(p.ship.fuelCap - p.ship.fuelCur);
 					p.ship.fuelCur = p.ship.fuelCap;

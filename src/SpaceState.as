@@ -214,7 +214,7 @@ package
 			
 			mapOn = false; // Might want to just get rid of this once dialog boxes are properly implemented.
 			
-			Main.player = player = new Player(this);
+			Player.p = player = new Player(this);
 			date = new Date(2142, 7, 22);
 			
 			//loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
@@ -226,6 +226,9 @@ package
 		 */
 		override public function create():void {
 			
+			FlxG.mouse.show();
+			
+		
 			//Prep MainMenuState
 			var startMenu:MainMenuState = new MainMenuState();
 			startMenu.create();
@@ -237,7 +240,7 @@ package
 		 * field together before starting play.
 		 */
 		public function initPlayingField():void {
-			frozen = false;
+			unfreeze();
 			
 			/*if (dialogScreen != null) {
 				dialogScreen.destroy();
@@ -413,6 +416,7 @@ package
 			player.ship.x = p.x;
 			player.ship.y = p.y;
 			player.ship.facingAngle = enteringAngle + Math.PI;
+			while (player.ship.facingAngle > Math.PI * 2) { player.ship.facingAngle -= Math.PI * 2;}
 			Main.viewport[0].update();
 			
 			loadSystem(to);

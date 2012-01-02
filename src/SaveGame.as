@@ -31,7 +31,7 @@ package {
 		}
 		
 		private function prepXML():void {
-			var player:Player = Main.player;
+			var player:Player = Player.p;
 			xml = new XML('<?xml version="1.0" encoding="UTF-8"?><data></data>');
 			xml.player.money = player.money;
 			xml.player.ship.fuelCur = player.ship.fuelCur;

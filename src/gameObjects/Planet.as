@@ -203,16 +203,16 @@ package gameObjects {
 		public function requestLanding():void {
 			if (canLand) {
 				if (initialLandingRequest || !inhabited) {
-					if (MathE.distance(Main.player.ship.getCenter(), getCenter()) < this.width + Main.player.ship.width) {
-						if (Main.player.ship.velSpeed <= Main.player.ship.maxSpeed / 10) {
+					if (MathE.distance(Player.p.ship.getCenter(), getCenter()) < this.width + Player.p.ship.width) {
+						if (Player.p.ship.velSpeed <= Player.p.ship.maxSpeed / 10) {
 							// Successful landing here!
 							SpaceMessage.push(new SpaceMessage("Landed successfully on " + name + "!"));
 							
 							Main.spaceScreen.freeze();
 							new LandedScreen(this);
 							if (inhabited) {
-								Main.player.ship.energyCur = Main.player.ship.energyCap;
-								Main.player.ship.shieldCur = Main.player.ship.shieldCap;
+								Player.p.ship.energyCur = Player.p.ship.energyCap;
+								Player.p.ship.shieldCur = Player.p.ship.shieldCap;
 							}
 							
 						} else {
@@ -271,10 +271,10 @@ package gameObjects {
 					if (FlxG.mouse.justPressed()) {
 						//trace("Clicked on " + name);
 						// Planet clicked.
-						if (Main.player.planetTarget != null) {
-							Main.player.planetTarget.loseFocus();
+						if (Player.p.planetTarget != null) {
+							Player.p.planetTarget.loseFocus();
 						}
-						Main.player.planetTarget = this;
+						Player.p.planetTarget = this;
 					}
 					
 				}
