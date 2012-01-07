@@ -6,8 +6,19 @@ package UIScreens {
 	
 	public class CargoShop extends UIScreen {
 		
-		public function CargoShop() {
+		/**
+		 * The planet at which the player is trading
+		 */
+		public var planet:Planet;
+		
+		//public static var i:uint = 0;
+		//public var unique:uint;
+		
+		public function CargoShop(_planet:Planet) {
 			super();
+			//unique = i++;
+			
+			planet = _planet;
 		}
 		
 		override public function update():void {
@@ -18,7 +29,7 @@ package UIScreens {
 		
 		override public function closeScreen():void {
 			//Remove any persisten objects here.
-			
+			//trace("close cargo shop " + unique);
 			super.closeScreen();
 		}
 		

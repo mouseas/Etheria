@@ -19,6 +19,7 @@
 		<maxSpeed>100</maxSpeed>
 		<rcs>1.9</rcs>
 		<thrustPower>100</thrustPower>
+		<cash>1000</cash>
 	</ship>
 	<ship id="0">
 		<name>Scoutship</name>
@@ -39,6 +40,7 @@
 		<maxSpeed>130</maxSpeed>
 		<rcs>2.1</rcs>
 		<thrustPower>140</thrustPower>
+		<cash>4200</cash>
 	</ship>
 	<ship id="0">
 		<name>Freighter</name>
@@ -59,5 +61,6 @@
 		<maxSpeed>85</maxSpeed>
 		<rcs>1.3</rcs>
 		<thrustPower>140</thrustPower>
+		<cash>12000</cash>
 	</ship>
 </data>

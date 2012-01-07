@@ -27,6 +27,7 @@ package gameObjects
 			return _ship;
 		}
 		public function set ship(s:Ship):void {
+			if (_ship != null) { _ship.playerControlled = false; }
 			s.playerControlled = true;
 			_ship = s;
 		}
@@ -139,6 +140,14 @@ package gameObjects
 					ship.turnTowardTarget(MathE.angleBetweenPoints(ship.getCenter(), planetTarget.getCenter()));
 				}
 				
+			}
+			
+			if (FlxG.keys.justPressed("J")) {
+				if (systemTarget != null && systemTarget != screen.currentSystem && 
+				screen.currentSystem.connectionsList.members.indexOf(systemTarget) > -1) {
+					ship.hyperTarget = systemTarget;
+					ship.inHyperspace = true;
+				}
 			}
 			
 			//Accelerating

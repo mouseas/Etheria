@@ -22,6 +22,11 @@ package UIScreens {
 		public var saveButton:FlxButton;
 		
 		/**
+		 * Cargo shop button.
+		 */
+		public var cargoButton:FlxButton;
+		
+		/**
 		 * Constructor.
 		 * @param	_planet Which planet the player has landed on, and from which to draw info and image.
 		 */
@@ -29,14 +34,21 @@ package UIScreens {
 			OKButton.label.text = "Leave";
 			planet = _planet;
 			
-			if (planet.inhabited && Player.p.ship.fuelCur < Player.p.ship.fuelCap) {
-				refuelButton = new FlxButton(OKButton.x, OKButton.y + 30, "Refuel", refuel);
-				refuelButton.scrollFactor = Main.NO_SCROLL;
-				add(refuelButton);
+			if (planet.inhabited) {
+				if (Player.p.ship.fuelCur < Player.p.ship.fuelCap) {
+					refuelButton = new FlxButton(OKButton.x, OKButton.y + 30, "Refuel", refuel);
+					refuelButton.scrollFactor = Main.NO_SCROLL;
+					buttonLayer.add(refuelButton);
+				}
+				
+				cargoButton = new FlxButton(OKButton.x, OKButton.y + 90, "Trade", cargoShop);
+				cargoButton.scrollFactor = Main.NO_SCROLL;
+				buttonLayer.add(cargoButton);
 			}
 			saveButton = new FlxButton(OKButton.x, OKButton.y + 60, "Save", save);
 			saveButton.scrollFactor = Main.NO_SCROLL;
-			add(saveButton);
+			buttonLayer.add(saveButton);
+			
 			
 		}
 		
@@ -78,7 +90,7 @@ package UIScreens {
 					p.ship.fuelCur += p.money;
 					p.money = 0;
 				}
-				remove(refuelButton, true);
+				buttonLayer.remove(refuelButton, true);
 				refuelButton.destroy();
 				refuelButton = null;
 			}
@@ -91,6 +103,12 @@ package UIScreens {
 			var save:SaveGame = new SaveGame();
 		}
 		
+		public function cargoShop():void {
+			trace ("cargoshop clicked");
+			//cargoButton.update();
+			cargoButton._pressed
+			new CargoShop(planet);
+		}
 		
 	}
 }

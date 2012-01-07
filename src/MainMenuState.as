@@ -116,19 +116,25 @@ package
 			}
 			// Keyboard command: start SpaceState in debug mode.
 			if (FlxG.keys.justPressed("X")) {
-				if(!Main.spaceScreen.initialized) {
-					Main.spaceScreen.initPlayingField();
-				}
-				if (Main.spaceScreen.currentSystem == null) {
-					Main.spaceScreen.loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
-				}
-				
-				loadTheUniverse();
-				
-				Main.spaceScreen.dialogLayer.remove(this, true);
-				Main.spaceScreen.unfreeze();
-				this.destroy();
+				startGame();
 			}
+		}
+		
+		public function startGame():void {
+			if(!Main.spaceScreen.initialized) {
+				Main.spaceScreen.initPlayingField();
+			}
+			if (Main.spaceScreen.currentSystem == null) {
+				Main.spaceScreen.loadSystem(Main.getObjectByID(0, SpaceSystem.allSystems) as SpaceSystem);
+			} else {
+				Main.spaceScreen.loadSystem(Main.spaceScreen.currentSystem);
+			}
+			
+			loadTheUniverse();
+			
+			Main.spaceScreen.dialogLayer.remove(this, true);
+			Main.spaceScreen.unfreeze();
+			this.destroy();
 		}
 		
 	}

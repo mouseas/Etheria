@@ -195,6 +195,7 @@ package
 			
 			SpaceSystem.generateSystems();
 			Planet.generatePlanets();
+			Cargo.prepCargo();
 			
 			//Layers
 			add(playingField);
@@ -287,14 +288,7 @@ package
 					}
 				}
 				if (!frozen) {
-					if (FlxG.keys.justPressed("Z")) {
-						if (player.systemTarget != null && player.systemTarget != currentSystem && 
-						currentSystem.connectionsList.members.indexOf(player.systemTarget) > -1) {
-							player.ship.hyperTarget = player.systemTarget;
-							player.ship.inHyperspace = true;
-						}
-					}
-					if (FlxG.keys.justPressed("BACKSLASH")) {
+					if (FlxG.keys.justPressed("BACKSLASH")) { // debug key
 						var sysNum:int = SpaceSystem.allSystems.members.indexOf(currentSystem);
 						sysNum++;
 						if (SpaceSystem.allSystems.length - 1 > sysNum) {
@@ -308,7 +302,7 @@ package
 						new mapScreen();
 					}
 					
-					if (FlxG.keys.justPressed("SLASH")) {
+					if (FlxG.keys.justPressed("SLASH")) { // doubletime
 						if (FlxG.timeScale > 1) {
 							FlxG.timeScale = 1;
 						} else {
@@ -339,7 +333,7 @@ package
 			//remove ships
 			while (shipsLayer.length > 0) {
 				var oldSysShip:Ship = shipsLayer.members[0];
-				trace("removing " + oldSysShip);
+				//trace("removing " + oldSysShip);
 				oldSysShip.removeFromScreen();
 				oldSysShip = null;
 			}

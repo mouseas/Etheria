@@ -1,7 +1,18 @@
 package gameObjects {
 	import org.flixel.*;
+	import flash.utils.ByteArray;
 	
 	public class Cargo extends FlxBasic {
+		
+		/**
+		 * File containing all the data for cargo types.
+		 */
+		[Embed(source = "../data/cargo.xml", mimeType = "application/octet-stream")]public static var XMLFile:Class;
+		
+		/**
+		 * Cargo type data; name, prices, etc. to generate a cargo object from or set up a cargo trade screen.
+		 */
+		public static var data:XML;
 		
 		/**
 		 * Number of units of this cargo. A ship's cargo hold is based off units
@@ -45,13 +56,9 @@ package gameObjects {
 		
 		/**
 		 * Creates a new Cargo object from the ID
-		 * @param	_id The id of the cargo - determines its type and other values besides qty.
-		 * @param  _qty How much cargo to make.
 		 */
-		public function Cargo(_id:uint, _qty:uint = 1, _mission:Boolean = false) {
-			ID = _id;
-			qty = _qty;
-			missionLinked = _mission;
+		public function Cargo() {
+			super();
 		}
 		
 		/**
@@ -62,90 +69,31 @@ package gameObjects {
 			return qty * massPerUnit;
 		}
 		
-		
-		
-		
-		
-		
+		public static function prepCargo():void {
+			var file:ByteArray = new XMLFile;
+			var str:String = file.readUTFBytes(file.length);
+			data = new XML(str);
+		}
 		
 		/**
-		 * All the cargo values, by ID. Whenever creating a new type of cargo, add a case here.
+		 * Create a new Cargo object by its
 		 */
-		private function newCargoById():void {
-			switch (ID) {
-				case 0:
-					name = "Food";
-					shortName = "Food";
-					massPerUnit = 1.0;
-					lowValue = 48;
-					medValue = 64;
-					highValue = 79;
-				break;
-				
-				case 1:
-					name = "Common Metals";
-					shortName = "Metal";
-					massPerUnit = 5.4;
-					lowValue = 140;
-					medValue = 210;
-					highValue = 280;
-				break;
-				
-				case 2:
-					name = "Rare Metals";
-					shortName = "Rare Met.";
-					massPerUnit = 7.0;
-					lowValue = 315;
-					medValue = 417;
-					highValue = 519;
-				break;
-				
-				case 3:
-					name = "Manufacturing Equipment";
-					shortName = "Mfg. Eq.";
-					massPerUnit = 2.8;
-					lowValue = 240;
-					medValue = 340;
-					highValue = 440;
-				break;
-				
-				case 4:
-					name = "Plastics";
-					shortName = "Plastic";
-					massPerUnit = 1.2;
-					lowValue = 48;
-					medValue = 65;
-					highValue = 79;
-				break;
-				
-				case 5:
-					name = "Luxury Goods";
-					shortName = "Lux Goods";
-					massPerUnit = 0.6;
-					lowValue = 413;
-					medValue = 604;
-					highValue = 795;
-				break;
-				
-				case 6:
-					name = "Terraforming Equipment";
-					shortName = "Ter. Eq.";
-					massPerUnit = 2.2;
-					lowValue = 281;
-					medValue = 392;
-					highValue = 503;
-				break;
-				
-				
-				default:
-				trace("Invalid Cargo ID " + ID + "has been generated. Copying values for Food.");
-				name = "Food Bad ID";
-				shortName = "FoodB";
-				massPerUnit = 1.0;
-				lowValue = 48;
-				medValue = 65;
-				highValue = 79;
-				
+		public static function makeCargo(_id:uint, _qty:uint, _missionLinked:Boolean = false):Cargo {
+			if (data == null) {
+				prepCargo();
+			}
+			var result:Cargo = new Cargo();
+			result.ID = _id;
+			result.qty = _qty;
+			if (data.cargo.length() > _id) {
+				result.name = data.cargo[_id].name;
+				result.shortName = data.cargo[_id].shortName;
+				result.massPerUnit = data.cargo[_id].massPerUnit;
+				result.missionLinked = _missionLinked;
+				return result;
+			} else {
+				trace ("ERROR: invalid cargo type ID " + _id + " requested!");
+				return null;
 			}
 		}
 		

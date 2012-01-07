@@ -203,6 +203,12 @@ package gameObjects
 		public var mods:FlxGroup;
 		
 		/**
+		 * How much money the ship is carrying. This is randomized by +/- 50% from the value in the ships XML data. Also, the player's
+		 * cash is handled separately.
+		 */
+		public var cash:uint;
+		
+		/**
 		 * Selection bracket around a target ship.
 		 */
 		public var selection:Selection;
@@ -217,17 +223,12 @@ package gameObjects
 		 */
 		public var hyperTarget:SpaceSystem;
 		
-		public var uniqueID:int;
-		public static var numShips:int = 0;
-		
 		/**
 		 * Constructor function.
 		 * @param _parent The screen this ship is on.
 		 * @param typeID What protoship ID to load when creating this ship.
 		 */
 		public function Ship(_parent:SpaceState, typeID:uint):void {
-			uniqueID = numShips++;
-			trace (uniqueID);
 			super(0, 0);
 			ID = typeID;
 			playerControlled = false;
@@ -279,6 +280,7 @@ package gameObjects
 				maxSpeed = 85;
 				rcs = 1.3;
 				thrustPower = 140;
+				cash = 0;
 			}
 			
 		}
@@ -326,6 +328,8 @@ package gameObjects
 			result.baseMass = data.ship[index].baseMass;
 			result.modSpace = data.ship[index].modSpace;
 			result.calculateMass();
+			result.cash = data.ship[index].cash;
+			result.cash = (result.cash * Math.random()) + (result.cash / 2); // randomize ship cash by +/- 50%
 			return result;
 		}
 		
@@ -504,7 +508,7 @@ package gameObjects
 			if (c == null) {
 				if (qty > 0) {
 					//Adding cargo
-					c = new Cargo(_id, qty);
+					c = Cargo.makeCargo(_id, qty);
 					cargoHold.add(c);
 				} else {
 					trace("Attempted to remove " + qty + " units of cargo that doesn't exist!");

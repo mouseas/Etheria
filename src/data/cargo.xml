@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data>
+	<cargo id="0">
+		<name>Food</name>
+		<shortName>Food</shortName>
+		<massPerUnit>1.0</massPerUnit>
+		<highValue>79</highValue>
+		<medValue>64</medValue>
+		<lowValue>48</lowValue>
+	</cargo>
+	<cargo id="1">
+		<name>Common Metals</name>
+		<shortName>Metal</shortName>
+		<massPerUnit>5.4</massPerUnit>
+		<highValue>280</highValue>
+		<medValue>210</medValue>
+		<lowValue>140</lowValue>
+	</cargo>
+	<cargo id="2">
+		<name>Rare Metals</name>
+		<shortName>Rare Met.</shortName>
+		<massPerUnit>7.0</massPerUnit>
+		<highValue>519</highValue>
+		<medValue>417</medValue>
+		<lowValue>315</lowValue>
+	</cargo>
+	<cargo id="3">
+		<name>Manufacturing Equipment</name>
+		<shortName>Mfg. Eq.</shortName>
+		<massPerUnit>2.8</massPerUnit>
+		<highValue>440</highValue>
+		<medValue>340</medValue>
+		<lowValue>240</lowValue>
+	</cargo>
+	<cargo id="4">
+		<name>Plastics</name>
+		<shortName>Plastics</shortName>
+		<massPerUnit>1.2</massPerUnit>
+		<highValue>79</highValue>
+		<medValue>65</medValue>
+		<lowValue>48</lowValue>
+	</cargo>
+	<cargo id="5">
+		<name>Luxury Goods</name>
+		<shortName>Lux.</shortName>
+		<massPerUnit>0.6</massPerUnit>
+		<highValue>795</highValue>
+		<medValue>604</medValue>
+		<lowValue>413</lowValue>
+	</cargo>
+	<cargo id="6">
+		<name>Terraforming Equipment</name>
+		<shortName>Ter. Eq.</shortName>
+		<massPerUnit>2.2</massPerUnit>
+		<highValue>503</highValue>
+		<medValue>395</medValue>
+		<lowValue>281</lowValue>
+	</cargo>
+</data>

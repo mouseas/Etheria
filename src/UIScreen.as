@@ -17,6 +17,11 @@ package {
 		public var OKButton:FlxButton;
 		
 		/**
+		 * Group to add buttons to. Used to disable buttons when a UIScreen is inactive.
+		 */
+		public var buttonLayer:FlxGroup;
+		
+		/**
 		 * Whether this is the current, top-most screen.
 		 */
 		public var current:Boolean;
@@ -53,10 +58,12 @@ package {
 			uiBackground.scrollFactor = (Main.NO_SCROLL);
 			add(uiBackground);
 			
+			buttonLayer = new FlxGroup();
+			add(buttonLayer);
+			
 			OKButton = new FlxButton(uiBackground.x + 10, uiBackground.y + 10, "OK", closeScreen);
 			OKButton.scrollFactor = (Main.NO_SCROLL);
-			add(OKButton);
-			current = true;
+			buttonLayer.add(OKButton);
 			
 		}
 		
@@ -82,9 +89,12 @@ package {
 			}
 			super.update();
 			if (Main.spaceScreen.dialogScreen == this) {
+				buttonLayer.active = true;
 				if (FlxG.keys.justPressed("ESCAPE") || FlxG.keys.justPressed("ENTER")) {
 					closeScreen();
 				}
+			} else {
+				buttonLayer.active = false;
 			}
 		}
 		

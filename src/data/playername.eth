@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
+  <isEtheriaSave>true</isEtheriaSave>
   <player>
     <money>9504</money>
     <ship>
@@ -11,7 +12,7 @@
     </ship>
     <shiptype>0</shiptype>
   </player>
-  <currentSystem>3</currentSystem>
+  <currentSystem>45</currentSystem>
   <currentPlanet>3</currentPlanet>
   <planet id="0">
     <population>-309804296</population>
@@ -29,10 +30,10 @@
     <explored>true</explored>
   </system>
   <system id="1">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="2">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="3">
     <explored>true</explored>
@@ -44,163 +45,163 @@
     <explored>true</explored>
   </system>
   <system id="6">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="7">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="8">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="9">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="10">
     <explored>true</explored>
   </system>
   <system id="11">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="12">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="13">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="14">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="15">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="16">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="17">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="18">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="19">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="20">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="21">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="22">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="23">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="24">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="25">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="26">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="27">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="28">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="29">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="30">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="31">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="32">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="33">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="34">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="35">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="36">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="37">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="38">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="39">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="40">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="41">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="42">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="43">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="44">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="45">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="46">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="47">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="48">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="49">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="50">
     <explored>true</explored>
   </system>
   <system id="51">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="52">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="53">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="54">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="55">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="56">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="57">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <system id="58">
-    <explored>false</explored>
+    <explored>true</explored>
   </system>
   <date>
     <year>undefined</year>

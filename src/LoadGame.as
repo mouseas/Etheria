@@ -109,7 +109,7 @@ package {
             dispatcher.addEventListener(Event.COMPLETE, completeHandler);
             dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
             dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-            dispatcher.addEventListener(Event.OPEN, openHandler);
+            //dispatcher.addEventListener(Event.OPEN, openHandler);
             dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
             dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
             dispatcher.addEventListener(Event.SELECT, selectHandler);
@@ -144,57 +144,64 @@ package {
 			xml = new XML(data.toString())
 			
 			//Parse the loaded data, checking for errors along the way.
-			
-			//Player data
-			var player:Player = Player.p;
-			player.money = xml.player.money
-			player.ship = Ship.cloneShip(xml.player.ship);
-			player.ship.playerControlled = true;
-			player.ship.fuelCur = xml.player.ship.fuelCur;
-			player.ship.energyCur = xml.player.ship.energyCur;
-			player.ship.shieldCur = xml.player.ship.shieldCur;
-			player.ship.armorCur = xml.player.ship.armorCur;
-			player.ship.structCur = xml.player.ship.structCur;
-			
-			//Load the system data (explored, etc)
-			for (var i:int = 0; i < xml.system.length() && i < SpaceSystem.allSystems.length; i++) {
-				var s:SpaceSystem = SpaceSystem.allSystems.members[i];
-				s.explored = xml.system[i].explored == "true";
-			}
-			while (i < SpaceSystem.allSystems.length) { // This handles old saves from before systems are added.
-				s = SpaceSystem.allSystems.members[i];
-				s.explored = false;
-				i++;
-			}
-			s = null;
-			
-			//Load the planet data (population, commodities, whether they like the player, etc.)
-			for (i = 0; i < xml.planet.length() && i < Planet.allPlanets.length; i++) {
-				var p:Planet = Planet.allPlanets.members[i];
-				p.population = xml.planet[i].population;
-			}
-			while (i < Planet.allPlanets.length) { // This handles old saves from before planets are added.
-				p = Planet.allPlanets.members[i];
-				//p.population set to default? // currently this does nothing.
-			}
-			p = null;
-			
-			//Load current system and place player at the planet he last landed on
-			var curPlanet:Planet = Planet.allPlanets.members[xml.currentPlanet];
-			player.ship.x = curPlanet.x + (curPlanet.width / 2) - (player.ship.width / 2);
-			player.ship.y = curPlanet.y + (curPlanet.height / 2) - (player.ship.height / 2);
-			Main.viewport[0].update();
-			Main.spaceScreen.loadSystem(SpaceSystem.allSystems.members[xml.currentSystem]);
-			
-			//clear out the message log when the saved game is loaded.
-			if (SpaceMessage.messageLog != null ) {
-				SpaceMessage.messageLog.destroy();
-			}
-			SpaceMessage.messageLog = new FlxGroup();
-			
-            trace("completeHandler: " + event);
-			if (callback != null) {
-				callback();
+			if (xml.isEtheriaSave == "true") {
+				//Player data
+				var player:Player = Player.p;
+				player.money = xml.player.money
+				player.ship = Ship.cloneShip(xml.player.ship);
+				player.ship.playerControlled = true;
+				player.ship.fuelCur = xml.player.ship.fuelCur;
+				player.ship.energyCur = xml.player.ship.energyCur;
+				player.ship.shieldCur = xml.player.ship.shieldCur;
+				player.ship.armorCur = xml.player.ship.armorCur;
+				player.ship.structCur = xml.player.ship.structCur;
+				
+				//Load the system data (explored, etc)
+				for (var i:int = 0; i < xml.system.length() && i < SpaceSystem.allSystems.length; i++) {
+					var s:SpaceSystem = SpaceSystem.allSystems.members[i];
+					s.explored = xml.system[i].explored == "true";
+				}
+				while (i < SpaceSystem.allSystems.length) { // This handles old saves from before systems are added.
+					s = SpaceSystem.allSystems.members[i];
+					s.explored = false;
+					i++;
+				}
+				s = null;
+				
+				//Load the planet data (population, commodities, whether they like the player, etc.)
+				for (i = 0; i < xml.planet.length() && i < Planet.allPlanets.length; i++) {
+					var p:Planet = Planet.allPlanets.members[i];
+					p.population = xml.planet[i].population;
+				}
+				while (i < Planet.allPlanets.length) { // This handles old saves from before planets are added.
+					p = Planet.allPlanets.members[i];
+					//p.population set to default? // currently this does nothing.
+				}
+				p = null;
+				
+				//Load current system and place player at the planet he last landed on
+				var curPlanet:Planet = Planet.allPlanets.members[xml.currentPlanet];
+				player.ship.x = curPlanet.x + (curPlanet.width / 2) - (player.ship.width / 2);
+				player.ship.y = curPlanet.y + (curPlanet.height / 2) - (player.ship.height / 2);
+				Main.viewport[0].update();
+				Main.spaceScreen.currentSystem = SpaceSystem.allSystems.members[xml.currentSystem];
+				
+				//clear out the message log when the saved game is loaded.
+				if (SpaceMessage.messageLog != null ) {
+					SpaceMessage.messageLog.destroy();
+				}
+				SpaceMessage.messageLog = new FlxGroup();
+				
+				
+				trace("completeHandler: " + event);
+				if (callback != null) {
+					callback();
+				} 
+			} else {
+				trace ("This is not an Etheria save game!");
+				if (callback != null) {
+					callback();
+				} 
 			}
         }
 
@@ -215,7 +222,7 @@ package {
 		 * @param	event
 		 */
         private function openHandler(event:Event):void {
-            trace("openHandler: " + event);
+            //trace("openHandler: " + event);
         }
 		
 		/**
@@ -224,7 +231,8 @@ package {
 		 */
         private function progressHandler(event:ProgressEvent):void {
             var file:FileReference = FileReference(event.target);
-            trace("progressHandler: name=" + file.name + " bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
+            //trace("progressHandler: name=" + file.name + " bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
+			trace ("Loading..." + ((int)((event.bytesLoaded / event.bytesTotal) * 100)) + "%");
 			loadBar.changeParent(event, "bytesLoaded", event.bytesTotal);
 			loadBar.value = event.bytesLoaded;
         }

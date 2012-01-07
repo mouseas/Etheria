@@ -32,7 +32,8 @@ package {
 		
 		private function prepXML():void {
 			var player:Player = Player.p;
-			xml = new XML('<?xml version="1.0" encoding="UTF-8"?><data></data>');
+			xml = <data />;
+			xml.isEtheriaSave = true;
 			xml.player.money = player.money;
 			xml.player.ship.fuelCur = player.ship.fuelCur;
 			xml.player.ship.energyCur = player.ship.energyCur;
@@ -43,15 +44,13 @@ package {
 			xml.currentSystem = Main.spaceScreen.currentSystem.ID;
 			xml.currentPlanet = player.planetTarget.ID;
 			for (var i:int = 0; i < Planet.allPlanets.length; i++) {
-				var segment:XML = new XML('<planet />');
-				xml.appendChild(segment);
+				xml.appendChild(<planet />);
 				var p:Planet = Planet.allPlanets.members[i];
 				xml.planet[i].@id = i;
 				xml.planet[i].population = p.population;
 			}
 			for (i = 0; i < SpaceSystem.allSystems.length; i++) {
-				segment = new XML('<system />');
-				xml.appendChild(segment);
+				xml.appendChild(<system />);
 				var s:SpaceSystem = SpaceSystem.allSystems.members[i];
 				xml.system[i].@id = i;
 				xml.system[i].explored = s.explored;
