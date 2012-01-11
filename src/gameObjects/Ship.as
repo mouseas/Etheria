@@ -158,9 +158,14 @@ package gameObjects
 		public var energyCur:Number;
 		
 		/**
-		 * FlxGroup containing the ship's cargo.
+		 * Array containing the ship's cargo types.
 		 */
-		public var cargoHold:FlxGroup;
+		public var cargoHold:Array;
+		
+		/**
+		 * Array containing the ship's cargo quantities.
+		 */
+		public var cargoHoldQty:Array;
 		
 		/**
 		 * Maximum cargo the ship can hold.
@@ -241,7 +246,8 @@ package gameObjects
 			
 			facingAngle = Math.random() * Math.PI * 2;
 			
-			cargoHold = new FlxGroup(); // If cargo isn't transferring to a new ship, this is why.
+			cargoHold = new Array(); // If cargo isn't transferring to a new ship, this is why.
+			cargoHoldQty = new Array();
 			
 			//Prime the mass variables so you don't have uninitialized numbers.
 			cargoMass = 0;
@@ -487,49 +493,40 @@ package gameObjects
 		}
 		
 		/**
-		 * Adds or subtracts non-mission cargo from the ship's hold.
-		 * @param	_id ID of the cargo type to add or remove.
-		 * @param	qty How many units to move. Positive values to add cargo, negative to remove.
-		 * @return Whether the transfer was successful. A false return is the result of a bug.
+		 * Adjusts the ship's cargo holds
+		 * @param	type ID of the cargo to alter
+		 * @param	qty How much to add. Use negative values to remove cargo.
 		 */
-		public function moveCargo(_id:uint, qty:int):Boolean {
-			if (qty == 0) { return true;}
-			var c:Cargo = null;
-			var i:int = 0;
-			//First, find if there is a matching cargo item.
-			while (c == null && i < cargoHold.length) {
-				var d:Cargo = cargoHold.members[i];
-				if (d != null && d.ID == _id && !d.missionLinked) {
-					c = d;
+		public function addRemoveCargo(type:int, qty:int):void {
+			var i:int = hasCargo(type)
+			if (i > -1) { // Ship already has cargo of this type.
+				if (-qty < cargoHoldQty[i]) {
+					cargoHoldQty[i] += qty;
+				} else {
+					cargoHold.splice(i, 1);
+					cargoHoldQty.splice(i, 1);
 				}
-				d = null;
-			}
-			//Then, add or remove cargo, creating new Cargo if needed.
-			if (c == null) {
+			} else { // Ship does not have cargo of this type yet.
 				if (qty > 0) {
-					//Adding cargo
-					c = Cargo.makeCargo(_id, qty);
-					cargoHold.add(c);
-				} else {
-					trace("Attempted to remove " + qty + " units of cargo that doesn't exist!");
-					return false; // Removing non-existant cargo!
-				}
-			} else {
-				if (c.qty + qty > 0) {
-					//Adding cargo to existing Cargo object.
-					c.qty += qty;
-				} else if (c.qty + qty == 0) {
-					// Removing exactly as much cargo as there is.
-					c.qty = 0;
-					cargoHold.remove(c, true);
-				} else {
-					trace("Attempted to remove " + qty + " units of cargo from " + c.qty + "!");
-					return false; //Removing more cargo than there is!
+					cargoHold.push(i);
+					cargoHoldQty.push(qty);
 				}
 			}
-			c = null;
 			calculateCargo();
-			return true;
+		}
+		
+		/**
+		 * Checks to see if the ship carries the indicated type of cargo.
+		 * @param	type What type (ID) of cargo to check for.
+		 * @return The index of the matching cargo type, or -1 if not found.
+		 */
+		public function hasCargo(type:int):int {
+			for (var i:int = 0; i < cargoHold.length; i++) {
+				if (cargoHold[i] == type) {
+					return i;
+				}
+			}
+			return -1;
 		}
 		
 		/**
@@ -539,15 +536,10 @@ package gameObjects
 			cargoMass = 0;
 			cargoCur = 0;
 			for (var i:int = 0; i < cargoHold.length; i++) {
-				if (cargoHold.members[i] != null) {
-					var c:Cargo = cargoHold.members[i] as Cargo;
-					cargoMass += c.getCargoMass();
-					cargoCur += c.qty;
-				} else {
-					trace("Null cargo hold entry at " + i);
-					cargoHold.remove(cargoHold.members[i], true);
-					i--;
-				}
+				var c:Cargo = Cargo.makeCargo(cargoHold[i], cargoHoldQty[i]);
+				cargoMass += c.massPerUnit * c.qty;
+				cargoCur += c.qty;
+				c = null;
 			}
 			if (cargoCur > cargoCap) {
 				trace ("Too much cargo in the hold! " + cargoCur + " units in " + cargoCap + " spaces.");

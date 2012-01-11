@@ -40,10 +40,11 @@ package UIScreens {
 					refuelButton.scrollFactor = Main.NO_SCROLL;
 					buttonLayer.add(refuelButton);
 				}
-				
-				cargoButton = new FlxButton(OKButton.x, OKButton.y + 90, "Trade", cargoShop);
-				cargoButton.scrollFactor = Main.NO_SCROLL;
-				buttonLayer.add(cargoButton);
+				if (planet.cargos.length > 0) {
+					cargoButton = new FlxButton(OKButton.x, OKButton.y + 90, "Trade", cargoShop);
+					cargoButton.scrollFactor = Main.NO_SCROLL;
+					buttonLayer.add(cargoButton);
+				}
 			}
 			saveButton = new FlxButton(OKButton.x, OKButton.y + 60, "Save", save);
 			saveButton.scrollFactor = Main.NO_SCROLL;
@@ -103,10 +104,10 @@ package UIScreens {
 			var save:SaveGame = new SaveGame();
 		}
 		
+		/**
+		 * Opens a new cargo shop screen.
+		 */
 		public function cargoShop():void {
-			trace ("cargoshop clicked");
-			//cargoButton.update();
-			cargoButton._pressed
 			new CargoShop(planet);
 		}
 		

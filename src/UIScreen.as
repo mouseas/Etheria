@@ -89,12 +89,12 @@ package {
 			}
 			super.update();
 			if (Main.spaceScreen.dialogScreen == this) {
-				buttonLayer.active = true;
+				buttonLayer.setAll("active", true);
 				if (FlxG.keys.justPressed("ESCAPE") || FlxG.keys.justPressed("ENTER")) {
 					closeScreen();
 				}
 			} else {
-				buttonLayer.active = false;
+				buttonLayer.setAll("active", false);
 			}
 		}
 		

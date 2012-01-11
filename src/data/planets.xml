@@ -10,15 +10,25 @@
 		<popGrowthRate>0.01092</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet001</spriteImage>
+		<cargo>
+			<type>0</type>
+			<qty>35194</qty>
+			<price>1</price>
+		</cargo>
+		<cargo>
+			<type>1</type>
+			<qty>27923</qty>
+			<price>0</price>
+		</cargo>
 	</planet>
 	<planet id="1">
 		<name>Mars</name>
 		<x>-50</x>
 		<y>0</y>
 		<canLand>true</canLand>
-		<inhabited>false</inhabited>
-		<population>0</population>
-		<popGrowthRate>0</popGrowthRate>
+		<inhabited>true</inhabited>
+		<population>1000</population>
+		<popGrowthRate>0.01000</popGrowthRate>
 		<system>0</system>
 		<spriteImage>planet000</spriteImage>
 	</planet>

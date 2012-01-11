@@ -86,6 +86,21 @@ package gameObjects {
 		public var reason:String;
 		
 		/**
+		 * Which cargoes the Planet trades in.
+		 */
+		public var cargos:Array;
+		
+		/**
+		 * How much of each cargo the Planet has in store.
+		 */
+		public var cargosQty:Array;
+		
+		/**
+		 * Which price to use; 0 for Low, 1 for Med, and 2 for High.
+		 */
+		public var cargosPrice:Array;
+		
+		/**
 		 * The space system the Planet resides in.
 		 */
 		public function get system():SpaceSystem {
@@ -144,6 +159,10 @@ package gameObjects {
 			inhabited = true;
 			reason = "Its environment is too hostile.";
 			
+			cargos = new Array();
+			cargosQty = new Array();
+			cargosPrice = new Array();
+			
 			loseFocus(); // Sets some variables to false.
 			
 		}
@@ -178,6 +197,11 @@ package gameObjects {
 				result.system = SpaceSystem.allSystems.members[data.planet[i].system];
 				result.spriteImage = result[data.planet[i].spriteImage];
 				allPlanets.add(result);
+				for (var j:int = 0; j < data.planet[i].cargo.length(); j++) {
+					result.cargos.push(data.planet[i].cargo[j].type);
+					result.cargosQty.push(data.planet[i].cargo[j].qty);
+					result.cargosPrice.push(data.planet[i].cargo[j].price);
+				}
 			}
 			
 			trace("Generating Planets...done!");
@@ -261,21 +285,15 @@ package gameObjects {
 		 * Function for handling when the player clicks on a planet.
 		 */
 		public function clickCheck():void {
-			if(FlxG.mouse.visible) {
+			if(FlxG.mouse.visible && FlxG.mouse.justPressed()) {
 				var _point:FlxPoint = new FlxPoint();
 				FlxG.mouse.getWorldPosition(parent.viewPortCam,_point);
 				if(overlapsPoint(_point, false, parent.viewPortCam)) {
 					
-					// Mouse is over Planet.
-					
-					if (FlxG.mouse.justPressed()) {
-						//trace("Clicked on " + name);
-						// Planet clicked.
-						if (Player.p.planetTarget != null) {
-							Player.p.planetTarget.loseFocus();
-						}
-						Player.p.planetTarget = this;
+					if (Player.p.planetTarget != null) {
+						Player.p.planetTarget.loseFocus();
 					}
+					Player.p.planetTarget = this;
 					
 				}
 				
