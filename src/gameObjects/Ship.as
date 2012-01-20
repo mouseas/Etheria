@@ -229,6 +229,31 @@ package gameObjects
 		public var hyperTarget:SpaceSystem;
 		
 		/**
+		 * What behavior the ship AI is currently doing.
+		 */
+		public var behavior:String;
+		
+		/**
+		 * What the ship AI's goal is.
+		 */
+		public var goal:String;
+		
+		/**
+		 * Which planet, if any, the AI is focused on.
+		 */
+		public var planetTarget:Planet;
+		
+		/**
+		 * Which ship, if any, the AI is focused on.
+		 */
+		public var shipTarget:Ship;
+		
+		/**
+		 * Which system, if any, the AI is aiming to travel to.
+		 */
+		public var systemTarget:SpaceSystem;
+		
+		/**
 		 * Constructor function.
 		 * @param _parent The screen this ship is on.
 		 * @param typeID What protoship ID to load when creating this ship.
@@ -288,6 +313,10 @@ package gameObjects
 				thrustPower = 140;
 				cash = 0;
 			}
+			
+			// AI settings here.
+			behavior = "none";
+			goal = "none";
 			
 		}
 		
@@ -365,6 +394,7 @@ package gameObjects
 			} else {
 				// Call ai stuff here, too.
 				clickCheck();
+				AIprocessing();
 			}
 			
 			if (FlxG.keys.N) { // Debug keystroke.
@@ -392,7 +422,7 @@ package gameObjects
 			
 			
 			if (Math.abs(velSpeed) > maxSpeed && !inHyperspace) {
-				//limits the speed of the ship to maxSpeed.
+				//limits the speed of the ship to maxSpeed, except during hyperspace.
 				velocity.x = Math.cos(velAngle) * maxSpeed;
 				velocity.y = Math.sin(velAngle) * maxSpeed;
 			}
@@ -667,6 +697,57 @@ package gameObjects
 			}
 			return str;
 		}
+		
+		/**
+		 * Goes through the behaviors and goals of the ship and acts accordingly.
+		 */
+		public function AIprocessing():void {
+			if (behavior == "none" || behavior == null || behavior == "") {
+				behavior = "exitsystem"; // set as default case
+				var pTargets:Array = new Array();
+				for (var i:int = 0; i < parent.planetList.members.length; i++) { // check for planets that trade cargo, and add to an array.
+					var p:Planet = parent.planetList.members[i];
+					if (p.inhabited && p.cargos.length > 0) {
+						pTargets.push(p);
+					}
+					p = null;
+				}
+				if (pTargets.length > 0) { // Pick a planet, or leave the system.
+					var whichOne:uint = (int)(Math.random() * (pTargets.length + 1));
+					if (whichOne < pTargets.length) {
+						behavior = "gotoplanet";
+						planetTarget = pTargets[whichOne];
+					}
+				}
+				pTargets = null;
+			}
+			
+			if (behavior == "exitsystem") {
+				if (systemTarget == null && parent.currentSystem.connectionsList.members.length > 0) { // pick a system.
+					whichOne = (int)(Math.random() * parent.currentSystem.connectionsList.members.length);
+					systemTarget = parent.currentSystem.connectionsList.members[whichOne];
+				} else { // Turn towards, or accelerate towards, or enter hyperspace to the target system.
+					if (Math.abs(facingAngle - MathE.angleBetweenPoints(parent.currentSystem.getCenter(), systemTarget.getCenter())) < 0.1) {
+						// If facing the right direction...
+						if (MathE.distance(getCenter(), new FlxPoint(0, 0)) >= SpaceSystem.SAFE_JUMP_DISTANCE) {
+							// If far enough from system center...
+							behavior = "inhyperspace";
+							inHyperspace = true;
+						} else { // Thrust to travel away from system center.
+							thrust();
+						}
+						
+						
+					} else { // If not, turn towards the target system.
+						turnTowardTarget(MathE.angleBetweenPoints(parent.currentSystem.getCenter(), systemTarget.getCenter()));
+					}
+					
+					
+				}
+			}
+			
+		}
+		
 	}
 	
 }

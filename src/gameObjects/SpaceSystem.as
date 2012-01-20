@@ -12,6 +12,8 @@ package gameObjects {
 		
 		public static var allSystemNames:FlxGroup;
 		
+		public static const SAFE_JUMP_DISTANCE:Number = 1000;
+		
 		
 		/**
 		 * Data file containing the SpaceSystems' data
@@ -78,7 +80,8 @@ package gameObjects {
 		public function SpaceSystem(_id:int) {
 			// note these aren't added to the group - if they were added, they would show up on the screen when the systems
 			// are displayed. Which would really screw up the map. Bigtime.
-			super(0, 0, radarImage);
+			super(0, 0);
+			loadGraphic(radarImage, true);
 			
 			color = 0x00ff00;
 			cameras = Main.map;
@@ -188,9 +191,13 @@ package gameObjects {
 		public static function updateMap():void {
 			for (var i:int = 0; i < allSystems.length; i++) {
 				var sys:SpaceSystem = allSystems.members[i];
+				sys.frame = 0;
 				if (sys.explored) {
 					sys.visible = true;
 					sys.nameText.visible = true;
+					if (sys == Main.spaceScreen.currentSystem) {
+						sys.frame = 1;
+					}
 					/*for (var j:int = 0; j < sys.connectionsList.length; j++) {
 						var connectedSys:SpaceSystem = sys.connectionsList.members[j];
 						if (!connectedSys.explored) {
